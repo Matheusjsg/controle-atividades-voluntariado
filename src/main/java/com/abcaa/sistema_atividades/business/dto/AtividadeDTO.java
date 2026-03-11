@@ -1,16 +1,8 @@
-package com.abcaa.sistema_atividades.entities;
-
-import com.abcaa.sistema_atividades.enums.StatusAtividade;
-import jakarta.persistence.*;
+package com.abcaa.sistema_atividades.business.dto;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name= "tb_atividade")
-public class Atividade {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AtividadeDTO {
     private Long id;
 
     private LocalDate data;
@@ -19,22 +11,17 @@ public class Atividade {
 
     private Integer tempoMinutos;
 
-    @ManyToOne
-    @JoinColumn(name = "voluntario_id")
-    private Voluntario voluntario;
+    private Long voluntarioId;
 
-    @Enumerated(EnumType.STRING)
-    private StatusAtividade status;
+    private String status;
 
+    public AtividadeDTO() {}
 
-    public Atividade() {}
-
-    public Atividade(Long id, LocalDate data, String descricao, Integer tempoMinutos, Voluntario voluntario, StatusAtividade status) {
-        this.id = id;
+    public AtividadeDTO(LocalDate data, String descricao, Integer tempoMinutos, Long voluntarioId, String status) {
         this.data = data;
         this.descricao = descricao;
         this.tempoMinutos = tempoMinutos;
-        this.voluntario = voluntario;
+        this.voluntarioId = voluntarioId;
         this.status = status;
     }
 
@@ -70,20 +57,19 @@ public class Atividade {
         this.tempoMinutos = tempoMinutos;
     }
 
-    public Voluntario getVoluntario() {
-        return voluntario;
+    public Long getVoluntarioId() {
+        return voluntarioId;
     }
 
-    public void setVoluntario(Voluntario voluntario) {
-        this.voluntario = voluntario;
+    public void setVoluntarioId(Long voluntarioId) {
+        this.voluntarioId = voluntarioId;
     }
 
-    public StatusAtividade getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(StatusAtividade status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }
-

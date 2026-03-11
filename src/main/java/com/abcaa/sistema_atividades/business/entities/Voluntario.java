@@ -1,6 +1,6 @@
-package com.abcaa.sistema_atividades.entities;
+package com.abcaa.sistema_atividades.business.entities;
 
-import com.abcaa.sistema_atividades.enums.TipoUsuario;
+import com.abcaa.sistema_atividades.business.enums.TipoUsuario;
 import jakarta.persistence.*;
 
 

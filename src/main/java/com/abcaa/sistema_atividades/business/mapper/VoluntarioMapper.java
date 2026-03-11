@@ -1,9 +1,9 @@
-package com.abcaa.sistema_atividades.mapper;
+package com.abcaa.sistema_atividades.business.mapper;
 
 
-import com.abcaa.sistema_atividades.dto.VoluntarioDTO;
-import com.abcaa.sistema_atividades.entities.Setor;
-import com.abcaa.sistema_atividades.entities.Voluntario;
+import com.abcaa.sistema_atividades.business.dto.VoluntarioDTO;
+import com.abcaa.sistema_atividades.business.entities.Setor;
+import com.abcaa.sistema_atividades.business.entities.Voluntario;
 
 public class VoluntarioMapper {
 

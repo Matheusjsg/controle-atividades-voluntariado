@@ -1,4 +1,4 @@
-package com.abcaa.sistema_atividades.enums;
+package com.abcaa.sistema_atividades.business.enums;
 
 public enum StatusAtividade {
     PENDENTE,

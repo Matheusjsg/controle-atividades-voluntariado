@@ -1,7 +1,7 @@
-package com.abcaa.sistema_atividades.mapper;
+package com.abcaa.sistema_atividades.business.mapper;
 
-import com.abcaa.sistema_atividades.dto.SetorDTO;
-import com.abcaa.sistema_atividades.entities.Setor;
+import com.abcaa.sistema_atividades.business.dto.SetorDTO;
+import com.abcaa.sistema_atividades.business.entities.Setor;
 
 public class SetorMapper {
 

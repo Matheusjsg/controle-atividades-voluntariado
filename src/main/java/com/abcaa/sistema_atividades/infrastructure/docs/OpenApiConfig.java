@@ -1,4 +1,4 @@
-package com.abcaa.sistema_atividades.docs;
+package com.abcaa.sistema_atividades.infrastructure.docs;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

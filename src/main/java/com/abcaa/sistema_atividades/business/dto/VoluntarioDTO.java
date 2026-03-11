@@ -1,4 +1,4 @@
-package com.abcaa.sistema_atividades.dto;
+package com.abcaa.sistema_atividades.business.dto;
 
 public class VoluntarioDTO {
     private Long id;

@@ -1,4 +1,4 @@
-package com.abcaa.sistema_atividades.config;
+package com.abcaa.sistema_atividades.infrastructure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

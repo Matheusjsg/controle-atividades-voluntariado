@@ -1,22 +1,14 @@
-package com.abcaa.sistema_atividades.entities;
+package com.abcaa.sistema_atividades.business.dto;
 
-import jakarta.persistence.*;
+public class SetorDTO {
 
-@Entity
-@Table(name= "tb_setor")
-public class Setor {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
 
+    public SetorDTO() {}
 
-    public Setor() {
-    }
-
-    public Setor(Long id, String nome) {
+    public SetorDTO(Long id, String nome) {
         this.id = id;
         this.nome = nome;
     }
