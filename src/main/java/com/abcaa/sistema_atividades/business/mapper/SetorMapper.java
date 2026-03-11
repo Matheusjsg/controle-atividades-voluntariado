@@ -2,7 +2,9 @@ package com.abcaa.sistema_atividades.business.mapper;
 
 import com.abcaa.sistema_atividades.business.dto.SetorDTO;
 import com.abcaa.sistema_atividades.business.entities.Setor;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SetorMapper {
 
     public static Setor toEntity(SetorDTO dto){

@@ -1,5 +1,7 @@
 package com.abcaa.sistema_atividades.business.dto;
 
+import com.abcaa.sistema_atividades.business.enums.TipoUsuario;
+
 public class VoluntarioDTO {
     private Long id;
 
@@ -9,12 +11,13 @@ public class VoluntarioDTO {
 
     private Long setorId;
 
-    private String tipoUsuario;
+    private TipoUsuario tipoUsuario;
 
 
-    public VoluntarioDTO() {}
+    public VoluntarioDTO() {
+    }
 
-    public VoluntarioDTO(Long id, String nome, String email, Long setorId, String tipoUsuario) {
+    public VoluntarioDTO(Long id, String nome, String email, Long setorId, TipoUsuario tipoUsuario) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -54,11 +57,11 @@ public class VoluntarioDTO {
         this.setorId = setorId;
     }
 
-    public String getTipoUsuario() {
+    public TipoUsuario getTipoUsuario() {
         return tipoUsuario;
     }
 
-    public void setTipoUsuario(String tipoUsuario) {
+    public void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
 }

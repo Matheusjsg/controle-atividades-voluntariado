@@ -3,7 +3,10 @@ package com.abcaa.sistema_atividades.business.mapper;
 import com.abcaa.sistema_atividades.business.dto.AtividadeDTO;
 import com.abcaa.sistema_atividades.business.entities.Atividade;
 import com.abcaa.sistema_atividades.business.entities.Voluntario;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AtividadeMapper {
 
     public static Atividade toEntity(AtividadeDTO dto, Voluntario voluntario){
@@ -18,7 +21,7 @@ public class AtividadeMapper {
         return atividade;
     }
 
-    public static AtividadeDTO toDTO(Atividade atividade){
+    public AtividadeDTO toDTO(Atividade atividade){
 
         AtividadeDTO dto = new AtividadeDTO();
 

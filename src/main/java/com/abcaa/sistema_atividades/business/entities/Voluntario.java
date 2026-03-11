@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 public class Voluntario {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.UUID)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name= "nome")
@@ -18,10 +18,11 @@ public class Voluntario {
     @Column(name= "email")
     private String email;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "setor_id")
     private Setor setor;
 
+    @Column(name = "tipo_usuario")
     @Enumerated(EnumType.STRING)
     private TipoUsuario tipoUsuario;
 

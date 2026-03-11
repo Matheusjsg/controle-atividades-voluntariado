@@ -22,7 +22,6 @@ public class VoluntarioService {
     }
 
 
-
     public VoluntarioDTO criar(VoluntarioDTO dto, Setor setorDto){
 
         Voluntario voluntario = VoluntarioMapper.toEntity(dto, setorDto);

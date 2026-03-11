@@ -4,7 +4,9 @@ package com.abcaa.sistema_atividades.business.mapper;
 import com.abcaa.sistema_atividades.business.dto.VoluntarioDTO;
 import com.abcaa.sistema_atividades.business.entities.Setor;
 import com.abcaa.sistema_atividades.business.entities.Voluntario;
+import org.springframework.stereotype.Component;
 
+@Component
 public class VoluntarioMapper {
 
 
@@ -28,6 +30,7 @@ public class VoluntarioMapper {
         dto.setNome(voluntario.getNome());
         dto.setEmail(voluntario.getEmail());
         dto.setSetorId(voluntario.getSetor().getId());
+        dto.setTipoUsuario(voluntario.getTipoUsuario());
 
         return dto;
     }

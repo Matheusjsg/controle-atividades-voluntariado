@@ -20,9 +20,7 @@ public class AtividadeService {
     private final VoluntarioRepository voluntarioRepository;
     private final AtividadeMapper atividadeMapper;
 
-    public AtividadeService(AtividadeRepository atividadeRepository,
-                            VoluntarioRepository voluntarioRepository, AtividadeMapper atividadeMapper) {
-
+        public AtividadeService(AtividadeRepository atividadeRepository, VoluntarioRepository voluntarioRepository, AtividadeMapper atividadeMapper) {
         this.atividadeRepository = atividadeRepository;
         this.voluntarioRepository = voluntarioRepository;
         this.atividadeMapper = atividadeMapper;
@@ -30,22 +28,21 @@ public class AtividadeService {
 
     public AtividadeDTO criar(AtividadeDTO dto){
 
-        Voluntario voluntario = voluntarioRepository
-                .findById(dto.getVoluntarioId())
+        Voluntario voluntario = voluntarioRepository.findById(dto.getVoluntarioId())
                 .orElseThrow();
 
-        Atividade atividade = AtividadeMapper.toEntity(dto, voluntario);
+        Atividade atividade = atividadeMapper.toEntity(dto, voluntario);
 
         atividade = atividadeRepository.save(atividade);
 
-        return AtividadeMapper.toDTO(atividade);
+        return atividadeMapper.toDTO(atividade);
     }
 
     public List<AtividadeDTO> listar(){
 
         return atividadeRepository.findAll()
                 .stream()
-                .map(AtividadeMapper::toDTO)
+                .map(atividadeMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -57,7 +54,7 @@ public class AtividadeService {
         atividade.setStatus(novoStatus);
         Atividade atualizado = atividadeRepository.save(atividade);
 
-        return AtividadeMapper.toDTO(atualizado);
+        return atividadeMapper.toDTO(atualizado);
     }
 
 }
