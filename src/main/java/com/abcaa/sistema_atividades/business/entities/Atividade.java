@@ -1,6 +1,7 @@
 package com.abcaa.sistema_atividades.business.entities;
 
 import com.abcaa.sistema_atividades.business.enums.StatusAtividade;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -13,10 +14,12 @@ public class Atividade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private LocalDate data;
 
     private String descricao;
 
+    @Column (name = "tempo_minutos")
     private Integer tempoMinutos;
 
     @ManyToOne

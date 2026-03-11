@@ -32,7 +32,8 @@ public class AtividadeService {
                 .orElseThrow();
 
         Atividade atividade = atividadeMapper.toEntity(dto, voluntario);
-
+        //mantendo o staus inicial de pendente
+        atividade.setStatus(StatusAtividade.PENDENTE);
         atividade = atividadeRepository.save(atividade);
 
         return atividadeMapper.toDTO(atividade);

@@ -1,5 +1,7 @@
 package com.abcaa.sistema_atividades.business.dto;
 
+import com.abcaa.sistema_atividades.business.enums.StatusAtividade;
+
 import java.time.LocalDate;
 
 public class AtividadeDTO {
@@ -13,17 +15,19 @@ public class AtividadeDTO {
 
     private Long voluntarioId;
 
-    private String status;
+    private StatusAtividade status;
 
     public AtividadeDTO() {}
 
-    public AtividadeDTO(LocalDate data, String descricao, Integer tempoMinutos, Long voluntarioId, String status) {
+    public AtividadeDTO(Long id, LocalDate data, String descricao, Integer tempoMinutos, Long voluntarioId, StatusAtividade status) {
+        this.id = id;
         this.data = data;
         this.descricao = descricao;
         this.tempoMinutos = tempoMinutos;
         this.voluntarioId = voluntarioId;
         this.status = status;
     }
+
 
     public Long getId() {
         return id;
@@ -65,11 +69,11 @@ public class AtividadeDTO {
         this.voluntarioId = voluntarioId;
     }
 
-    public String getStatus() {
+    public StatusAtividade getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusAtividade status) {
         this.status = status;
     }
 }

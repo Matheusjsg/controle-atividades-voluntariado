@@ -16,12 +16,12 @@ public class AtividadeController {
         this.atividadeService = atividadeService;
     }
 
-    @PostMapping
+    @PostMapping("/criar")
     public AtividadeDTO criar(@RequestBody AtividadeDTO dto){
         return atividadeService.criar(dto);
     }
 
-    @GetMapping
+    @GetMapping("/listar")
     public List<AtividadeDTO> listar(){
         return atividadeService.listar();
     }

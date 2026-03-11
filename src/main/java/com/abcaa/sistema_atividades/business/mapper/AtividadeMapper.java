@@ -30,6 +30,7 @@ public class AtividadeMapper {
         dto.setDescricao(atividade.getDescricao());
         dto.setTempoMinutos(atividade.getTempoMinutos());
         dto.setVoluntarioId(atividade.getVoluntario().getId());
+        dto.setStatus(atividade.getStatus());
 
         return dto;
     }
