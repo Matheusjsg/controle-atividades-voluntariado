@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SetorMapper {
 
-    public static Setor toEntity(SetorDTO dto){
+    public Setor toEntity(SetorDTO dto){
 
         Setor setor = new Setor();
 
@@ -27,5 +27,13 @@ public class SetorMapper {
         return dto;
     }
 
+    public Setor toDomain(SetorDTO setorDTO){
+            if (setorDTO == null) return null;
+            return new Setor(
+                    setorDTO.getId(),
+                    setorDTO.getNome()
+            );
+
+    }
 
 }

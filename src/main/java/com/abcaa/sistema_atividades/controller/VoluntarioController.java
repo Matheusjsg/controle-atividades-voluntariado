@@ -19,10 +19,10 @@ public class VoluntarioController {
 
     @PostMapping("/criar")
     public VoluntarioDTO criar(@RequestBody VoluntarioDTO dto, Setor setorDTO){
-        return voluntarioService.criar(dto, setorDTO);
+        return voluntarioService.criar(dto);
     }
 
-    @GetMapping("/lista")
+    @GetMapping("/listar")
     public List<VoluntarioDTO> listar(){
         return voluntarioService.listar();
     }

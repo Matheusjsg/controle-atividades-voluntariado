@@ -3,7 +3,9 @@ package com.abcaa.sistema_atividades.business.service;
 import com.abcaa.sistema_atividades.business.dto.VoluntarioDTO;
 import com.abcaa.sistema_atividades.business.entities.Setor;
 import com.abcaa.sistema_atividades.business.entities.Voluntario;
+import com.abcaa.sistema_atividades.business.enums.TipoUsuario;
 import com.abcaa.sistema_atividades.business.mapper.VoluntarioMapper;
+import com.abcaa.sistema_atividades.business.repositories.SetorRepository;
 import com.abcaa.sistema_atividades.business.repositories.VoluntarioRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +17,24 @@ public class VoluntarioService {
 
     private final VoluntarioRepository voluntarioRepository;
     private final VoluntarioMapper voluntarioMapper;
+    private final SetorRepository setorRepository;
 
-    public VoluntarioService(VoluntarioRepository voluntarioRepository, VoluntarioMapper voluntarioMapper) {
+    public VoluntarioService(VoluntarioRepository voluntarioRepository, VoluntarioMapper voluntarioMapper, SetorRepository setorRepository) {
         this.voluntarioRepository = voluntarioRepository;
         this.voluntarioMapper = voluntarioMapper;
+        this.setorRepository = setorRepository;
     }
 
 
-    public VoluntarioDTO criar(VoluntarioDTO dto, Setor setorDto){
+    public VoluntarioDTO criar(VoluntarioDTO dto){
 
-        Voluntario voluntario = VoluntarioMapper.toEntity(dto, setorDto);
+        Voluntario voluntario = voluntarioMapper.toEntity(dto);
+
+        voluntario.setTipoUsuario(TipoUsuario.VOLUNTARIO);
+
+        Setor setor = setorRepository.findById(dto.getSetorId())
+                .orElseThrow(() -> new RuntimeException("Setor não encontrado"));
+
 
         voluntario = voluntarioRepository.save(voluntario);
 

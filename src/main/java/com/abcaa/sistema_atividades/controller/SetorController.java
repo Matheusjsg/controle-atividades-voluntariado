@@ -21,7 +21,7 @@ public class SetorController {
         return setorService.criar(dto);
     }
 
-    @GetMapping("/lista")
+    @GetMapping("/listar")
     public List<SetorDTO> listar(){
         return setorService.listar();
     }
