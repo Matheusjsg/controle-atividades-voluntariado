@@ -1,20 +1,27 @@
 package com.abcaa.sistema_atividades.business.dto;
 
 import com.abcaa.sistema_atividades.business.enums.ActivityStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
 
 public class ActivityDTO {
+    @Schema(description = "ID da atividade", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
+    @Schema(description = "Data de realização da atividade", example = "2024-01-15", required = true)
     private LocalDate date;
 
+    @Schema(description = "Descrição detalhada da atividade realizada", example = "Organização de doações e atendimento ao público")
     private String description;
 
+    @Schema(description = "Duração da atividade em minutos", example = "120", required = true)
     private Integer durationMinutes;
 
+    @Schema(description = "ID do voluntário responsável", example = "5", required = true)
     private Long volunteerId;
 
+    @Schema(description = "Status atual da atividade", example = "PENDING")
     private ActivityStatus activityStatus;
 
     public ActivityDTO() {}

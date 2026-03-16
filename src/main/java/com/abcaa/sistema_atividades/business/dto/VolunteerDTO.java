@@ -1,16 +1,22 @@
 package com.abcaa.sistema_atividades.business.dto;
 
 import com.abcaa.sistema_atividades.business.enums.UserType;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class VolunteerDTO {
+    @Schema(description = "ID do voluntário", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
+    @Schema(description = "Nome completo do voluntário", example = "João Silva", required = true)
     private String name;
 
+    @Schema(description = "Email do voluntário", example = "joao.silva@email.com")
     private String email;
 
+    @Schema(description = "ID do setor onde o voluntário atua", example = "2", required = true)
     private Long departmentId;
 
+    @Schema(description = "Tipo de usuário no sistema", example = "VOLUNTARIO")
     private UserType userType;
 
 

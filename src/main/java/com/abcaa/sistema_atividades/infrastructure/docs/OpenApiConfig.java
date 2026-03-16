@@ -12,7 +12,7 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API de Resgistro de Activity da Ong")
+                        .title("API de Registro de Activity da Ong")
                         .version("1.0")
                         .description("Documentação da API do sistema."));
     }
