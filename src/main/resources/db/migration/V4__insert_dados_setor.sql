@@ -1,5 +1,5 @@
-INSERT INTO tb_setor (nome) VALUES
-('Setor Pendente!'),
+INSERT INTO tb_department (name) VALUES
+('Setor Pendente'),
 ('Gestão e Administração'),
 ('Tecnologia e Desenvolvimento'),
 ('Dados e Análise'),

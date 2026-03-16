@@ -1,15 +1,15 @@
-CREATE TABLE tb_atividade (
+CREATE TABLE tb_activity (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data DATE NOT NULL,
-    descricao TEXT,
-    tempo_minutos INTEGER,
-    voluntario_id BIGINT NOT NULL,
-    status VARCHAR(20) DEFAULT 'PENDENTE',
+    date DATE NOT NULL,
+    description TEXT,
+    duration_minutes INTEGER,
+    volunteer_id BIGINT NOT NULL,
+    activity_status VARCHAR(20) DEFAULT 'PENDENTE',
 
-    CONSTRAINT fk_atividade_voluntario
-        FOREIGN KEY (voluntario_id)
-        REFERENCES tb_voluntario(id)
+    CONSTRAINT fk_activity_volunter
+        FOREIGN KEY (volunteer_id)
+        REFERENCES tb_volunteer(id)
 );
 
-CREATE INDEX idx_atividade_voluntario
-ON tb_atividade(voluntario_id);
+CREATE INDEX idx_activity_volunteer
+ON tb_activity(volunteer_id);
