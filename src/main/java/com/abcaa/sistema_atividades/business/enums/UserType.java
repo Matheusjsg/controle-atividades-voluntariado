@@ -1,6 +1,6 @@
 package com.abcaa.sistema_atividades.business.enums;
 
-public enum TipoUsuario {
-    VOLUNTARIO,
+public enum UserType {
+    VOLUNTEER,
     ADMIN
 }
