@@ -33,30 +33,21 @@ public class VolunteerService {
         volunteer.setUserType(UserType.VOLUNTEER);
 
         Department department = departmentRepository.findById(dto.getDepartmentId())
-                .orElseThrow(() -> new RuntimeException("Department não encontrado"));
-
+                .orElseThrow(() -> new RuntimeException("Setor não encontrado"));
 
         volunteer = volunteerRepository.save(volunteer);
 
-        return VolunteerMapper.toDTO(volunteer);
+        return volunteerMapper.toDTO(volunteer);
     }
 
     public List<VolunteerDTO> findAll(){
 
-        return volunteerRepository.findAll()
-                .stream()
-                .map(VolunteerMapper::toDTO)
-                .collect(Collectors.toList());
+        List<Volunteer> findAll = volunteerRepository.findAll();
+
+        return volunteerMapper.toDTOs(findAll);
     }
 
-    public VolunteerDTO volunteerData(Long id){
 
-        Volunteer volunteer = volunteerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Informações não encontrada."));
-        return volunteerMapper.toDTO(volunteer);
-
-
-    }
 
     public void deleteVolunteer(Long id){
         Volunteer volunteer = volunteerRepository.findById(id)

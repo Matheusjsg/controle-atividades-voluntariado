@@ -34,7 +34,8 @@ public class ActivityService {
 
         //mantendo o status inicial como  "PENDENTE"
         activity.setActivityStatus(ActivityStatus.PENDING);
-        activity = activityRepository.save(activity);
+
+        Activity savedactivity = activityRepository.save(activity);
 
         return activityMapper.toDTO(activity);
     }

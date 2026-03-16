@@ -1,16 +1,16 @@
-CREATE TABLE tb_voluntario (
+CREATE TABLE tb_volunteer (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    nome VARCHAR(150) NOT NULL,
+    name VARCHAR(150) NOT NULL,
     email VARCHAR(150),
-    setor_id BIGINT NOT NULL,
-    tipo_usuario VARCHAR(20),
+    department_id BIGINT NOT NULL,
+    user_type VARCHAR(20),
 
-    CONSTRAINT fk_voluntario_setor
-        FOREIGN KEY (setor_id)
-        REFERENCES tb_setor(id),
+    CONSTRAINT fk_volunteer_department
+        FOREIGN KEY (department_id)
+        REFERENCES tb_department(id),
 
-    CONSTRAINT uk_voluntario_nome UNIQUE (nome)
+    CONSTRAINT uk_volunteer_name UNIQUE (name)
 );
 
-CREATE INDEX idx_voluntario_setor
-ON tb_voluntario(setor_id);
+CREATE INDEX idx_volunteer_department
+ON tb_volunteer(department_id);

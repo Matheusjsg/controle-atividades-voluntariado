@@ -3,8 +3,9 @@ package com.abcaa.sistema_atividades.business.mapper;
 import com.abcaa.sistema_atividades.business.dto.ActivityDTO;
 import com.abcaa.sistema_atividades.business.entities.Activity;
 import com.abcaa.sistema_atividades.business.entities.Volunteer;
+import org.springframework.stereotype.Component;
 
-
+@Component
 
 public class ActivityMapper {
 
@@ -16,6 +17,8 @@ public class ActivityMapper {
         activity.setDescription(dto.getDescription());
         activity.setDurationMinutes(dto.getDurationMinutes());
         activity.setVolunteer(volunteer);
+        activity.setActivityStatus(dto.getActivityStatus());
+
 
         return activity;
     }

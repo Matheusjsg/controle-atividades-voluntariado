@@ -26,14 +26,14 @@ public class DepartmentService {
 
         Department saved = departmentRepository.save(departmentEntity);
 
-        return DepartmentMapper.toDTO(saved);
+        return departmentMapper.toDTO(saved);
     }
 
     public List<DepartmentDTO> findAll(){
 
         return departmentRepository.findAll()
                 .stream()
-                .map(DepartmentMapper::toDTO)
+                .map(departmentMapper::toDTO)
                 .collect(Collectors.toList());
     }
 

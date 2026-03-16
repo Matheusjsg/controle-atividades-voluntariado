@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name= "tb_atividade")
+@Table(name= "tb_activity")
 public class Activity {
 
     @Id
@@ -17,13 +17,14 @@ public class Activity {
 
     private String description;
 
-    @Column (name = "tempo_minutos")
+    @Column (name = "duration_minutes")
     private Integer durationMinutes;
 
     @ManyToOne
-    @JoinColumn(name = "voluntario_id")
+    @JoinColumn(name = "volunteer_id")
     private Volunteer volunteer;
 
+    @Column (name = "activity_status")
     @Enumerated(EnumType.STRING)
     private ActivityStatus activityStatus;
 

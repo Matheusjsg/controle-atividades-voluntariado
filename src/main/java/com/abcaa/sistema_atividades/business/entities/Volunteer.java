@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 
 @Entity
-@Table(name= "tb_voluntario")
+@Table(name= "tb_volunteer")
 public class Volunteer {
 
     @Id
@@ -19,10 +19,10 @@ public class Volunteer {
     private String email;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "setor_id")
+    @JoinColumn(name = "department_id")
     private Department department;
 
-    @Column(name = "tipo_usuario")
+    @Column(name = "user_type")
     @Enumerated(EnumType.STRING)
     private UserType userType;
 

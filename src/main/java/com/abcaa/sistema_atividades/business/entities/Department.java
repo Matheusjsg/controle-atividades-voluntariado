@@ -3,7 +3,7 @@ package com.abcaa.sistema_atividades.business.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name= "tb_setor")
+@Table(name= "tb_department")
 public class Department {
 
     @Id

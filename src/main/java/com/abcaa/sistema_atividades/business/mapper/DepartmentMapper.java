@@ -17,7 +17,7 @@ public class DepartmentMapper {
         return department;
     }
 
-    public static DepartmentDTO toDTO(Department department){
+    public DepartmentDTO toDTO(Department department){
 
         DepartmentDTO dto = new DepartmentDTO();
 
@@ -27,13 +27,5 @@ public class DepartmentMapper {
         return dto;
     }
 
-    public Department toDomain(DepartmentDTO departmentDTO){
-            if (departmentDTO == null) return null;
-            return new Department(
-                    departmentDTO.getId(),
-                    departmentDTO.getName()
-            );
-
-    }
 
 }
