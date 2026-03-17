@@ -1,12 +1,16 @@
 package com.abcaa.sistema_atividades.controller;
 
+import com.abcaa.sistema_atividades.business.dto.ActivityDTO;
 import com.abcaa.sistema_atividades.business.dto.VolunteerDTO;
 import com.abcaa.sistema_atividades.business.entities.Department;
+import com.abcaa.sistema_atividades.business.service.ActivityService;
 import com.abcaa.sistema_atividades.business.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +21,11 @@ import java.util.List;
 public class VolunteerController {
 
     private final VolunteerService volunteerService;
+    private final ActivityService activityService;
 
-    public VolunteerController(VolunteerService volunteerService) {
+    public VolunteerController(VolunteerService volunteerService, ActivityService activityService) {
         this.volunteerService = volunteerService;
+        this.activityService = activityService;
     }
 
     @PostMapping("/create")
@@ -33,12 +39,18 @@ public class VolunteerController {
     }
 
 
-
+    @GetMapping("/activity/{id}")
+    @Operation(summary ="Listar atividades do voluntario", description = "Busca atividades criadas pelo voluntário")
+            @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Voluntário não encontrado")})
+    public ResponseEntity<List<ActivityDTO>> findByAcity(@PathVariable Long id){
+        return ResponseEntity.ok(activityService.findByVolunteerId(id));
+    }
 
     @Operation(summary = "Listar todos os voluntários", description = "Retorna a lista completa de voluntários cadastrados")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
-    })
+            @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso") })
     @GetMapping("/list")
     public List<VolunteerDTO> findAll(){
         return volunteerService.findAll();
