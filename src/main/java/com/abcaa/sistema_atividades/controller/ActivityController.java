@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,21 +25,53 @@ public class ActivityController {
 
     @PostMapping("/create")
     @Operation(summary = "Registrar nova atividade", description = "Cria um novo registro de atividade realizada por um voluntário")
-    @ApiResponses(value = {
+            @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Atividade registrada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos"),
             @ApiResponse(responseCode = "404", description = "Voluntário não encontrado")})
-    public ActivityDTO create(@RequestBody ActivityDTO dto){
-        return activityService.create(dto);
+    public ResponseEntity<ActivityDTO> create(@RequestBody ActivityDTO dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(activityService.create(dto));
+
     }
 
+    @PutMapping("/update/{id}")
+    @Operation(summary = "Atualizar atividade", description = "Atualiza os dados de uma atividade existente")
+            @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Atividade atualizada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+            @ApiResponse(responseCode = "404", description = "Atividade não encontrada")})
+    public ResponseEntity<ActivityDTO> update(@PathVariable Long id, @RequestBody ActivityDTO activityDTO){
+         return ResponseEntity.ok(activityService.activityUpdate(id, activityDTO));
 
+    }
+    @DeleteMapping("/delete/{id}")
+    @Operation(summary = "Excluir atividade", description = "Remove um registro de atividade do sistema")
+            @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Atividade excluída com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Atividade não encontrada")})
+    public ResponseEntity<Void> deleteActivity(@PathVariable Long id){
+        activityService.deleteActivity(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/list/{id}")
+    @Operation(summary = "Buscar atividade por ID", description = "Retorna os dados de uma atividade específica pelo seu ID")
+            @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Atividade retornada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Atividade não encontrada")})
+    public ResponseEntity<ActivityDTO> findById(@PathVariable Long id){
+        return ResponseEntity.ok(activityService.findById(id));
+    }
+
+    @GetMapping("/listAll")
     @Operation(summary = "Listar todas as atividades", description = "Retorna a lista completa de atividades registradas")
-    @ApiResponses(value = {
+            @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")})
-    @GetMapping("/list")
-    public List<ActivityDTO> findAll(){
-                return activityService.findAll();
+    public ResponseEntity<List<ActivityDTO>> findAll(){
+        return ResponseEntity.ok(activityService.findAll());
     }
+
+
+
 
 }
