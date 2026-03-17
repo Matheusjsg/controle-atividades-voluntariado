@@ -1,6 +1,7 @@
 package com.abcaa.sistema_atividades.controller;
 
 import com.abcaa.sistema_atividades.business.dto.ActivityDTO;
+import com.abcaa.sistema_atividades.business.enums.ActivityStatus;
 import com.abcaa.sistema_atividades.business.service.ActivityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -78,13 +79,20 @@ public class ActivityController {
 
 
 
-
     @GetMapping("/listAll")
     @Operation(summary = "Listar todas as atividades", description = "Retorna a lista completa de atividades registradas")
             @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")})
     public ResponseEntity<List<ActivityDTO>> findAll(){
         return ResponseEntity.ok(activityService.findAll());
+    }
+
+
+
+    @GetMapping("/status/{status}")
+        @Operation(summary = "Listar atividades por status")
+    public ResponseEntity<List<ActivityDTO>> findByStatus(@PathVariable ActivityStatus status){
+        return ResponseEntity.ok(activityService.findActivitiesByStatus(status));
     }
 
 
