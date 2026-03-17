@@ -1,6 +1,7 @@
 package com.abcaa.sistema_atividades.controller;
 
 import com.abcaa.sistema_atividades.business.dto.ActivityDTO;
+import com.abcaa.sistema_atividades.business.enums.ActivityStatus;
 import com.abcaa.sistema_atividades.business.service.ActivityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -43,6 +44,7 @@ public class ActivityController {
     public ResponseEntity<ActivityDTO> update(@PathVariable Long id, @RequestBody ActivityDTO activityDTO){
          return ResponseEntity.ok(activityService.activityUpdate(id, activityDTO));
 
+
     }
     @DeleteMapping("/delete/{id}")
     @Operation(summary = "Excluir atividade", description = "Remove um registro de atividade do sistema")
@@ -54,6 +56,18 @@ public class ActivityController {
         return ResponseEntity.noContent().build();
     }
 
+
+    @GetMapping("/volunteer/{volunteerId}")
+    @Operation(summary ="Listar atividades do voluntario", description = "Busca atividades criadas pelo voluntário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Voluntário não encontrado")})
+    public ResponseEntity<List<ActivityDTO>> findByAcity(@PathVariable Long id){
+        return ResponseEntity.ok(activityService.findByVolunteerId(id));
+    }
+
+
+
     @GetMapping("/list/{id}")
     @Operation(summary = "Buscar atividade por ID", description = "Retorna os dados de uma atividade específica pelo seu ID")
             @ApiResponses(value = {
@@ -63,12 +77,22 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.findById(id));
     }
 
+
+
     @GetMapping("/listAll")
     @Operation(summary = "Listar todas as atividades", description = "Retorna a lista completa de atividades registradas")
             @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")})
     public ResponseEntity<List<ActivityDTO>> findAll(){
         return ResponseEntity.ok(activityService.findAll());
+    }
+
+
+
+    @GetMapping("/status/{status}")
+        @Operation(summary = "Listar atividades por status")
+    public ResponseEntity<List<ActivityDTO>> findByStatus(@PathVariable ActivityStatus status){
+        return ResponseEntity.ok(activityService.findActivitiesByStatus(status));
     }
 
 
