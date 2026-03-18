@@ -26,7 +26,7 @@ public class TbUser implements UserDetails {
     private String name;
     @Column(name = "email", length = 100)
     private String email;
-    @Column(name = "password", length = 100)
+    @Column(name = "password")
     private String password;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
