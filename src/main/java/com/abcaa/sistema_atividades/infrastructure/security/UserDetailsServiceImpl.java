@@ -12,19 +12,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     // Repositório para acessar dados de usuário no banco de dados
     @Autowired
-    private UserRepository usuarioRepository;
+    private UserRepository userRepository;
 
-    // Implementação do método para carregar detalhes do usuário pelo e-mail
+    //Implementação do metodo para carregar detalhes do usuário pelo e-mail
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Busca o usuário no banco de dados pelo e-mail
-        TbUser Tbuser = usuarioRepository.findByEmail(email)
+        TbUser Tbuser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + email));
 
         // Cria e retorna um objeto UserDetails com base no usuário encontrado
         return org.springframework.security.core.userdetails.User
-                .withUsername(TbUser.getEmail()) // Define o nome de usuário como o e-mail
-                .password(TbUser.getPassword()) // Define a senha do usuário
+                .withUsername(Tbuser.getEmail()) // Define o nome de usuário como o e-mail
+                .password(Tbuser.getPassword()) // Define a senha do usuário
                 .build(); // Constrói o objeto UserDetails
     }
 }
