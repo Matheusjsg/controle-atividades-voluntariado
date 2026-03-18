@@ -1,5 +1,4 @@
-package com.javanauta.aprendendospring.infrastructure.security;
-
+package com.abcaa.sistema_atividades.infrastructure.security;
 import com.abcaa.sistema_atividades.business.entities.TbUser;
 import com.abcaa.sistema_atividades.business.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
