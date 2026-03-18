@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.lang.module.ResolutionException;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -42,5 +44,15 @@ public class UserService {
 
     public boolean verificaEmailExistente (String email){
         return userRepository.existsByEmail(email);
+
+    }
+
+    public TbUser SearchUserByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(
+                ()-> new ResolutionException("Email não encontrado " + email));
+    }
+
+    public void deleteUserByEmail(String email){
+        userRepository.deleteByEmail(email);
     }
 }
