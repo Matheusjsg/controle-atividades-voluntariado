@@ -1,4 +1,4 @@
-package com.javanauta.aprendendospring.infrastructure.security;
+package com.abcaa.sistema_atividades.infrastructure.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
