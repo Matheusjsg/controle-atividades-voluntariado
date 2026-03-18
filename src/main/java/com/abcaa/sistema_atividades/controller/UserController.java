@@ -5,14 +5,12 @@ import com.abcaa.sistema_atividades.business.entities.TbUser;
 import com.abcaa.sistema_atividades.business.service.UserService;
 import com.abcaa.sistema_atividades.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/tb_user")
@@ -34,6 +32,18 @@ public class UserController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userDTO.getEmail(), userDTO.getPassword())
         );
-        return jwtUtil.generateToken(authentication.getName());
+        return "Bearer " + jwtUtil.generateToken(authentication.getName());
+    }
+
+    @GetMapping
+    public ResponseEntity<TbUser> SearchUserByEmail(@RequestParam("email") String email){
+        return ResponseEntity.ok(userService.SearchUserByEmail(email));
+    }
+
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> deleteUserByEmail(@PathVariable String email){
+        userService.deleteUserByEmail(email);
+       return ResponseEntity.ok().build();
+
     }
 }
