@@ -96,6 +96,15 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.findActivitiesByStatus(status));
     }
 
+    @PatchMapping("/{id}/status")
+    @Operation(summary = "Atualizar status da atividade", description = "Atualiza o status de uma atividade para PENDING, APPROVED ou REJECTED")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Status atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Atividade não encontrada")})
+    public ResponseEntity<ActivityDTO> updateStatus(@PathVariable Long id, @RequestParam ActivityStatus status) {
+        return ResponseEntity.ok(activityService.statusUpdate(id, status));
+    }
+
 
 
 
