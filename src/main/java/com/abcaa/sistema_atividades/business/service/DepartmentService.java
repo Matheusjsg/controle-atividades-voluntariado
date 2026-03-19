@@ -4,6 +4,7 @@ import com.abcaa.sistema_atividades.business.dto.DepartmentDTO;
 import com.abcaa.sistema_atividades.business.entities.Department;
 import com.abcaa.sistema_atividades.business.mapper.DepartmentMapper;
 import com.abcaa.sistema_atividades.business.repositories.DepartmentRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class DepartmentService {
     public DepartmentDTO departmentUpdate(Long id, DepartmentDTO dto){
 
         Department existingDepartment = departmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Setor não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Setor não encontrado."));
 
         existingDepartment.setName(dto.getName());
 
@@ -46,7 +47,7 @@ public class DepartmentService {
 
     public void delete(Long id) {
                 Department department = departmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Setor não encontrada."));
+                .orElseThrow(() -> new EntityNotFoundException("Setor não encontrado."));
 
         departmentRepository.deleteById(department.getId());
 
@@ -55,7 +56,7 @@ public class DepartmentService {
     public DepartmentDTO findById(Long id) {
 
         Department department = departmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Setor não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Setor não encontrado."));
 
         return departmentMapper.toDTO(department);
     }

@@ -8,6 +8,7 @@ import com.abcaa.sistema_atividades.business.enums.ActivityStatus;
 import com.abcaa.sistema_atividades.business.mapper.ActivityMapper;
 import com.abcaa.sistema_atividades.business.repositories.ActivityRepository;
 import com.abcaa.sistema_atividades.business.repositories.VolunteerRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -29,7 +30,7 @@ public class ActivityService {
     public ActivityDTO create(ActivityDTO dto){
 
         Volunteer volunteer = volunteerRepository.findById(dto.getVolunteerId())
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado."));
 
         Activity activity = activityMapper.toEntity(dto, volunteer);
 
@@ -44,7 +45,7 @@ public class ActivityService {
     @Transactional
     public ActivityDTO findById(Long id) {
         Activity activity = activityRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Atividade não encontrada."));
+                .orElseThrow(() -> new EntityNotFoundException("Atividade não encontrada."));
         return activityMapper.toDTO(activity);
     }
 
@@ -76,14 +77,14 @@ public class ActivityService {
     @Transactional
     public ActivityDTO activityUpdate(Long id, ActivityDTO activityDTO) {
         Activity existingActivity = activityRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Activity não encontrada."));
+                .orElseThrow(() -> new EntityNotFoundException("Atividade não encontrada."));
 
         existingActivity.setDate(activityDTO.getDate());
         existingActivity.setDescription(activityDTO.getDescription());
         existingActivity.setDurationMinutes(activityDTO.getDurationMinutes());
 
         Volunteer volunteer = volunteerRepository.findById(activityDTO.getVolunteerId())
-                .orElseThrow(() -> new RuntimeException("Volunteer não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado."));
 
         existingActivity.setVolunteer(volunteer);
 
@@ -95,7 +96,7 @@ public class ActivityService {
     @Transactional
     public ActivityDTO statusUpdate(Long id, ActivityStatus newStatus) {
         Activity activity = activityRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Activity não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Atividade não encontrada."));
 
         activity.setActivityStatus(newStatus);
         Activity updated = activityRepository.save(activity);
@@ -113,7 +114,7 @@ public class ActivityService {
 
     public ActivityReportDTO getReport(Long volunteerId) {
         Volunteer volunteer = volunteerRepository.findById(volunteerId)
-                .orElseThrow(() -> new RuntimeException("Voluntário não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado."));
 
         List<Activity> activities = activityRepository.findByVolunteerIdAndActivityStatus(volunteerId, ActivityStatus.APPROVED);
 
