@@ -1,6 +1,7 @@
 package com.abcaa.sistema_atividades.controller;
 
 import com.abcaa.sistema_atividades.business.dto.ActivityDTO;
+import com.abcaa.sistema_atividades.business.dto.ActivityReportDTO;
 import com.abcaa.sistema_atividades.business.enums.ActivityStatus;
 import com.abcaa.sistema_atividades.business.service.ActivityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -103,6 +105,18 @@ public class ActivityController {
             @ApiResponse(responseCode = "404", description = "Atividade não encontrada")})
     public ResponseEntity<ActivityDTO> updateStatus(@PathVariable Long id, @RequestParam ActivityStatus status) {
         return ResponseEntity.ok(activityService.statusUpdate(id, status));
+    }
+
+    @GetMapping("/report/{volunteerId}")
+    @Operation(summary = "Relatório de horas do voluntário", description = "Retorna o total de horas aprovadas de um voluntário, com filtro opcional por período")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Relatório gerado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Voluntário não encontrado")})
+    public ResponseEntity<ActivityReportDTO> getReport(
+            @PathVariable Long volunteerId,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate) {
+        return ResponseEntity.ok(activityService.getReport(volunteerId, startDate, endDate));
     }
 
 
