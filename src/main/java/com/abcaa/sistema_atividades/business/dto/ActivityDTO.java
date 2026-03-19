@@ -1,6 +1,7 @@
 package com.abcaa.sistema_atividades.business.dto;
 
 import com.abcaa.sistema_atividades.business.enums.ActivityStatus;
+import com.abcaa.sistema_atividades.business.validation.ValidDuration;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
@@ -15,23 +16,28 @@ public class ActivityDTO {
     @Schema(description = "Descrição detalhada da atividade realizada", example = "Organização de doações e atendimento ao público")
     private String description;
 
+    @ValidDuration
     @Schema(description = "Duração da atividade em minutos", example = "120", required = true)
     private Integer durationMinutes;
 
     @Schema(description = "ID do voluntário responsável", example = "5", required = true)
     private Long volunteerId;
 
+    @Schema(description = "Nome do voluntário responsável", example = "João Silva", accessMode = Schema.AccessMode.READ_ONLY)
+    private String volunteerName;
+
     @Schema(description = "Status atual da atividade", example = "PENDING")
     private ActivityStatus activityStatus;
 
     public ActivityDTO() {}
 
-    public ActivityDTO(Long id, LocalDate date, String description, Integer durationMinutes, Long volunteerId, ActivityStatus activityStatus) {
+    public ActivityDTO(Long id, LocalDate date, String description, Integer durationMinutes, Long volunteerId, String volunteerName, ActivityStatus activityStatus) {
         this.id = id;
         this.date = date;
         this.description = description;
         this.durationMinutes = durationMinutes;
         this.volunteerId = volunteerId;
+        this.volunteerName = volunteerName;
         this.activityStatus = activityStatus;
     }
 
@@ -74,6 +80,14 @@ public class ActivityDTO {
 
     public void setVolunteerId(Long volunteerId) {
         this.volunteerId = volunteerId;
+    }
+
+    public String getVolunteerName() {
+        return volunteerName;
+    }
+
+    public void setVolunteerName(String volunteerName) {
+        this.volunteerName = volunteerName;
     }
 
     public ActivityStatus getActivityStatus() {

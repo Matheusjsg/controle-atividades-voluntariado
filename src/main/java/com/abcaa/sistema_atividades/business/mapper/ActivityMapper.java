@@ -32,6 +32,7 @@ public class ActivityMapper {
         dto.setDescription(activity.getDescription());
         dto.setDurationMinutes(activity.getDurationMinutes());
         dto.setVolunteerId(activity.getVolunteer().getId());
+        dto.setVolunteerName(activity.getVolunteer().getName());
         dto.setActivityStatus(activity.getActivityStatus());
 
         return dto;

@@ -41,7 +41,7 @@ public class VolunteerService {
 
     public List<VolunteerDTO> findAll(){
 
-        List<Volunteer> findAll = volunteerRepository.findAll();
+        List<Volunteer> findAll = volunteerRepository.findAllByOrderByNameAsc();
 
         return volunteerMapper.toDTOs(findAll);
     }
