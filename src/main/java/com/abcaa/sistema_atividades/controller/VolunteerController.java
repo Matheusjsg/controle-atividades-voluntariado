@@ -24,6 +24,7 @@ public class VolunteerController {
 
     }
 
+
     @PostMapping("/create")
     @Operation(summary = "Cadastrar novo voluntário", description = "Cria um novo cadastro de voluntário no sistema")
     @ApiResponses(value = {
@@ -35,14 +36,6 @@ public class VolunteerController {
     }
 
 
-    @GetMapping("/activity/{id}")
-    @Operation(summary ="Listar atividades do voluntario", description = "Busca atividades criadas pelo voluntário")
-            @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Voluntário não encontrado")})
-    public ResponseEntity<List<ActivityDTO>> findByAcity(@PathVariable Long id){
-        return ResponseEntity.ok(activityService.findByVolunteerId(id));
-    }
 
     @Operation  (summary = "Excluir voluntário", description = "Remove um voluntário do sistema com base no ID informado")
     @DeleteMapping("/delete/{id}")
@@ -59,8 +52,6 @@ public class VolunteerController {
             @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso") })
     @GetMapping("/list")
-    public List<VolunteerDTO> findAll(){
-        return volunteerService.findAll();
     public ResponseEntity<List<VolunteerDTO>> findAll(){
         return ResponseEntity.ok(volunteerService.findAll());
     }
