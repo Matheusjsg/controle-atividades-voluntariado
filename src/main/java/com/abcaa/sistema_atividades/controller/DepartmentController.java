@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,11 +26,44 @@ public class DepartmentController {
 
     @Operation(summary = "Cadastrar novo setor", description = "Cria um novo setor na organização")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Setor cadastrado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos")})
+    @ApiResponse(responseCode = "201", description = "Setor cadastrado com sucesso"),
+    @ApiResponse(responseCode = "400", description = "Dados inválidos")})
     @PostMapping("/create")
-    public DepartmentDTO create(@RequestBody DepartmentDTO dto){
-        return departmentService.create(dto);
+    public ResponseEntity<DepartmentDTO> create(@RequestBody DepartmentDTO dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(departmentService.create(dto));
+    }
+
+
+
+    @PutMapping("/update/{id}")
+    @Operation(summary = "Atualizar dados do setor", description = "Atualiza as informações de um setor existente")
+    @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Setor atualizado com sucesso"),
+    @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+    @ApiResponse(responseCode = "404", description = "Setor não encontrado")})
+    public ResponseEntity<DepartmentDTO> update(@PathVariable Long id, @RequestBody DepartmentDTO dto){
+        return ResponseEntity.ok(departmentService.departmentUpdate(id, dto));
+    }
+
+
+    @Operation(summary = "Excluir setor", description = "Remove um setor cadastrado com base no ID informado")
+    @ApiResponses(value = {
+    @ApiResponse(responseCode = "204", description = "Setor excluído com sucesso"),
+    @ApiResponse(responseCode = "404", description = "Setor não encontrado")})
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+                 departmentService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @Operation(summary = "Buscar setor por ID", description = "Retorna os dados de um setor específico com base no ID informado")
+    @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Setor retornado com sucesso"),
+    @ApiResponse(responseCode = "404", description = "Setor não encontrado")})
+    @GetMapping("/{id}")
+    public ResponseEntity<DepartmentDTO> findById(@PathVariable Long id){
+        return ResponseEntity.ok(departmentService.findById(id));
     }
 
 
@@ -36,8 +71,8 @@ public class DepartmentController {
     @Operation(summary = "Listar todos os setores", description = "Retorna a lista completa de setores cadastrados")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")})
     @GetMapping("/list")
-    public List<DepartmentDTO> findAll(){
-        return departmentService.findAll();
+    public ResponseEntity<List<DepartmentDTO>> findAll(){
+                return ResponseEntity.ok(departmentService.findAll());
     }
 
 }

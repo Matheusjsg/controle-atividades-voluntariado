@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.abcaa</groupId>
-	<artifactId>sistema-atividades</artifactId>
+	<artifactId>Backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
     <name>Sistema de Atividades Voluntários</name>
 	<description>Demo project for Spring Boot</description>

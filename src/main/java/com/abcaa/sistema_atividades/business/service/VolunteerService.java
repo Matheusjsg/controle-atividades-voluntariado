@@ -8,9 +8,9 @@ import com.abcaa.sistema_atividades.business.mapper.VolunteerMapper;
 import com.abcaa.sistema_atividades.business.repositories.DepartmentRepository;
 import com.abcaa.sistema_atividades.business.repositories.VolunteerRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.stream.Collectors;
+
+
 
 @Service
 public class VolunteerService {
@@ -30,30 +30,60 @@ public class VolunteerService {
 
         Volunteer volunteer = volunteerMapper.toEntity(dto);
 
+        //CRIANDO VOLUNTARIO COMO PADRÃO !!!!TEMPORARIAMENTE!!!
         volunteer.setUserType(UserType.VOLUNTEER);
-
-        Department department = departmentRepository.findById(dto.getDepartmentId())
-                .orElseThrow(() -> new RuntimeException("Setor não encontrado"));
 
         volunteer = volunteerRepository.save(volunteer);
 
         return volunteerMapper.toDTO(volunteer);
     }
 
+
     public List<VolunteerDTO> findAll(){
 
-        List<Volunteer> findAll = volunteerRepository.findAll();
+        List<Volunteer> findAll = volunteerRepository.findAllByOrderByNameAsc();
 
         return volunteerMapper.toDTOs(findAll);
     }
 
 
+    public VolunteerDTO findById(Long id){
+
+        Volunteer volunteer = volunteerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Voluntário não encontrado."));
+
+        return volunteerMapper.toDTO(volunteer);
+    }
+
+
+
+    public VolunteerDTO volunteerUpdate(Long id, VolunteerDTO dto){
+
+        Volunteer existingVolunteer = volunteerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Voluntário não encontrado."));
+
+        existingVolunteer.setName(dto.getName());
+        existingVolunteer.setEmail(dto.getEmail());
+
+        Department department = departmentRepository.findById(dto.getDepartmentId())
+                .orElseThrow(() -> new RuntimeException("Setor não encontrado."));
+
+        existingVolunteer.setDepartment(department);
+        existingVolunteer.setUserType(dto.getUserType());
+
+        Volunteer updatedVolunteer = volunteerRepository.save(existingVolunteer);
+
+         return volunteerMapper.toDTO(updatedVolunteer);
+
+    }
+
 
     public void deleteVolunteer(Long id){
         Volunteer volunteer = volunteerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-
         volunteerRepository.deleteById(volunteer.getId());
     }
+
+
 
 }

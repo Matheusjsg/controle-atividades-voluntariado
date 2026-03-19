@@ -20,6 +20,7 @@ public class DepartmentService {
         this.departmentMapper = departmentMapper;
     }
 
+
     public DepartmentDTO create(DepartmentDTO dto){
 
         Department departmentEntity = departmentMapper.toEntity(dto);
@@ -28,6 +29,37 @@ public class DepartmentService {
 
         return departmentMapper.toDTO(saved);
     }
+
+
+    public DepartmentDTO departmentUpdate(Long id, DepartmentDTO dto){
+
+        Department existingDepartment = departmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Setor não encontrado."));
+
+        existingDepartment.setName(dto.getName());
+
+        Department updatedDepartment = departmentRepository.save(existingDepartment);
+
+        return departmentMapper.toDTO(updatedDepartment);
+
+    }
+
+    public void delete(Long id) {
+                Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Setor não encontrada."));
+
+        departmentRepository.deleteById(department.getId());
+
+    }
+
+    public DepartmentDTO findById(Long id) {
+
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Setor não encontrado."));
+
+        return departmentMapper.toDTO(department);
+    }
+
 
     public List<DepartmentDTO> findAll(){
 

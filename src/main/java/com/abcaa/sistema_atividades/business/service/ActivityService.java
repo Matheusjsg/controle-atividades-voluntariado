@@ -1,6 +1,7 @@
 package com.abcaa.sistema_atividades.business.service;
 
 import com.abcaa.sistema_atividades.business.dto.ActivityDTO;
+import com.abcaa.sistema_atividades.business.dto.ActivityReportDTO;
 import com.abcaa.sistema_atividades.business.entities.Activity;
 import com.abcaa.sistema_atividades.business.entities.Volunteer;
 import com.abcaa.sistema_atividades.business.enums.ActivityStatus;
@@ -9,6 +10,7 @@ import com.abcaa.sistema_atividades.business.repositories.ActivityRepository;
 import com.abcaa.sistema_atividades.business.repositories.VolunteerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +50,7 @@ public class ActivityService {
     }
 
 
-     @Transactional
+    @Transactional
     public void deleteActivity(Long id) {
         activityRepository.deleteById(id);
     }
@@ -83,6 +85,7 @@ public class ActivityService {
 
         Volunteer volunteer = volunteerRepository.findById(activityDTO.getVolunteerId())
                 .orElseThrow(() -> new RuntimeException("Volunteer não encontrado."));
+
         existingActivity.setVolunteer(volunteer);
 
         Activity updatedActivity = activityRepository.save(existingActivity);
@@ -103,10 +106,28 @@ public class ActivityService {
 
 
     public List<ActivityDTO> findAll(){
-
         return activityRepository.findAll()
                 .stream()
                 .map(activityMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public ActivityReportDTO getReport(Long volunteerId, LocalDate startDate, LocalDate endDate) {
+        Volunteer volunteer = volunteerRepository.findById(volunteerId)
+                .orElseThrow(() -> new RuntimeException("Voluntário não encontrado."));
+
+        List<Activity> activities = activityRepository.findApprovedByVolunteerAndPeriod(volunteerId, startDate, endDate);
+
+        int totalMinutes = activities.stream().mapToInt(Activity::getDurationMinutes).sum();
+        List<ActivityDTO> activityDTOs = activities.stream().map(activityMapper::toDTO).collect(Collectors.toList());
+
+        return new ActivityReportDTO(
+                volunteer.getId(),
+                volunteer.getName(),
+                volunteer.getDepartment().getName(),
+                totalMinutes,
+                activities.size(),
+                activityDTOs
+        );
     }
 }
