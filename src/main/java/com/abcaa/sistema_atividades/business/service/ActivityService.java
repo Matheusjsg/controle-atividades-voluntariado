@@ -10,7 +10,6 @@ import com.abcaa.sistema_atividades.business.repositories.ActivityRepository;
 import com.abcaa.sistema_atividades.business.repositories.VolunteerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -112,11 +111,11 @@ public class ActivityService {
                 .collect(Collectors.toList());
     }
 
-    public ActivityReportDTO getReport(Long volunteerId, LocalDate startDate, LocalDate endDate) {
+    public ActivityReportDTO getReport(Long volunteerId) {
         Volunteer volunteer = volunteerRepository.findById(volunteerId)
                 .orElseThrow(() -> new RuntimeException("Voluntário não encontrado."));
 
-        List<Activity> activities = activityRepository.findApprovedByVolunteerAndPeriod(volunteerId, startDate, endDate);
+        List<Activity> activities = activityRepository.findByVolunteerIdAndActivityStatus(volunteerId, ActivityStatus.APPROVED);
 
         int totalMinutes = activities.stream().mapToInt(Activity::getDurationMinutes).sum();
         List<ActivityDTO> activityDTOs = activities.stream().map(activityMapper::toDTO).collect(Collectors.toList());
