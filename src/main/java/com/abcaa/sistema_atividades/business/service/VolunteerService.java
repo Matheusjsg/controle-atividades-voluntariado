@@ -7,6 +7,7 @@ import com.abcaa.sistema_atividades.business.enums.UserType;
 import com.abcaa.sistema_atividades.business.mapper.VolunteerMapper;
 import com.abcaa.sistema_atividades.business.repositories.DepartmentRepository;
 import com.abcaa.sistema_atividades.business.repositories.VolunteerRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class VolunteerService {
     public VolunteerDTO findById(Long id){
 
         Volunteer volunteer = volunteerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Voluntário não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado."));
 
         return volunteerMapper.toDTO(volunteer);
     }
@@ -60,13 +61,13 @@ public class VolunteerService {
     public VolunteerDTO volunteerUpdate(Long id, VolunteerDTO dto){
 
         Volunteer existingVolunteer = volunteerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Voluntário não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado."));
 
         existingVolunteer.setName(dto.getName());
         existingVolunteer.setEmail(dto.getEmail());
 
         Department department = departmentRepository.findById(dto.getDepartmentId())
-                .orElseThrow(() -> new RuntimeException("Setor não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Setor não encontrado."));
 
         existingVolunteer.setDepartment(department);
         existingVolunteer.setUserType(dto.getUserType());
@@ -80,7 +81,7 @@ public class VolunteerService {
 
     public void deleteVolunteer(Long id){
         Volunteer volunteer = volunteerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado."));
         volunteerRepository.deleteById(volunteer.getId());
     }
 
