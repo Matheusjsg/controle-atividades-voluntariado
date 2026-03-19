@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class ActivityController {
             @ApiResponse(responseCode = "201", description = "Atividade registrada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos"),
             @ApiResponse(responseCode = "404", description = "Voluntário não encontrado")})
-    public ResponseEntity<ActivityDTO> create(@RequestBody ActivityDTO dto){
+    public ResponseEntity<ActivityDTO> create(@Valid @RequestBody ActivityDTO dto){
         return ResponseEntity.status(HttpStatus.CREATED).body(activityService.create(dto));
 
     }
@@ -41,7 +42,7 @@ public class ActivityController {
             @ApiResponse(responseCode = "200", description = "Atividade atualizada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos"),
             @ApiResponse(responseCode = "404", description = "Atividade não encontrada")})
-    public ResponseEntity<ActivityDTO> update(@PathVariable Long id, @RequestBody ActivityDTO activityDTO){
+    public ResponseEntity<ActivityDTO> update(@PathVariable Long id, @Valid @RequestBody ActivityDTO activityDTO){
          return ResponseEntity.ok(activityService.activityUpdate(id, activityDTO));
 
 
