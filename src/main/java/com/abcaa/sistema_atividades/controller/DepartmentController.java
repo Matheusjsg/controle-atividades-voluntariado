@@ -23,12 +23,12 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
-
+    @PostMapping("/create")
     @Operation(summary = "Cadastrar novo setor", description = "Cria um novo setor na organização")
     @ApiResponses(value = {
     @ApiResponse(responseCode = "201", description = "Setor cadastrado com sucesso"),
     @ApiResponse(responseCode = "400", description = "Dados inválidos")})
-    @PostMapping("/create")
+
     public ResponseEntity<DepartmentDTO> create(@RequestBody DepartmentDTO dto){
         return ResponseEntity.status(HttpStatus.CREATED).body(departmentService.create(dto));
     }
@@ -45,33 +45,30 @@ public class DepartmentController {
         return ResponseEntity.ok(departmentService.departmentUpdate(id, dto));
     }
 
-
+    @DeleteMapping("/delete/{id}")
     @Operation(summary = "Excluir setor", description = "Remove um setor cadastrado com base no ID informado")
     @ApiResponses(value = {
     @ApiResponse(responseCode = "204", description = "Setor excluído com sucesso"),
     @ApiResponse(responseCode = "404", description = "Setor não encontrado")})
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+        public ResponseEntity<Void> delete(@PathVariable Long id){
                  departmentService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-
+    @GetMapping("/{id}")
     @Operation(summary = "Buscar setor por ID", description = "Retorna os dados de um setor específico com base no ID informado")
     @ApiResponses(value = {
     @ApiResponse(responseCode = "200", description = "Setor retornado com sucesso"),
     @ApiResponse(responseCode = "404", description = "Setor não encontrado")})
-    @GetMapping("/{id}")
     public ResponseEntity<DepartmentDTO> findById(@PathVariable Long id){
         return ResponseEntity.ok(departmentService.findById(id));
     }
 
 
-
+    @GetMapping("/list")
     @Operation(summary = "Listar todos os setores", description = "Retorna a lista completa de setores cadastrados")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")})
-    @GetMapping("/list")
-    public ResponseEntity<List<DepartmentDTO>> findAll(){
+        public ResponseEntity<List<DepartmentDTO>> findAll(){
                 return ResponseEntity.ok(departmentService.findAll());
     }
 

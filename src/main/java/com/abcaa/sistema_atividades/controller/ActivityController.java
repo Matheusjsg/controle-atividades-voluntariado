@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -65,8 +64,8 @@ public class ActivityController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Voluntário não encontrado")})
-    public ResponseEntity<List<ActivityDTO>> findByAcity(@PathVariable Long id){
-        return ResponseEntity.ok(activityService.findByVolunteerId(id));
+    public ResponseEntity<List<ActivityDTO>> findByAcity(@PathVariable Long volunteerId){
+        return ResponseEntity.ok(activityService.findByVolunteerId(volunteerId));
     }
 
 
@@ -98,6 +97,7 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.findActivitiesByStatus(status));
     }
 
+
     @PatchMapping("/{id}/status")
     @Operation(summary = "Atualizar status da atividade", description = "Atualiza o status de uma atividade para PENDING, APPROVED ou REJECTED")
     @ApiResponses(value = {
@@ -112,11 +112,8 @@ public class ActivityController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Relatório gerado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Voluntário não encontrado")})
-    public ResponseEntity<ActivityReportDTO> getReport(
-            @PathVariable Long volunteerId,
-            @RequestParam(required = false) LocalDate startDate,
-            @RequestParam(required = false) LocalDate endDate) {
-        return ResponseEntity.ok(activityService.getReport(volunteerId, startDate, endDate));
+    public ResponseEntity<ActivityReportDTO> getReport(@PathVariable Long volunteerId) {
+        return ResponseEntity.ok(activityService.getReport(volunteerId));
     }
 
 
