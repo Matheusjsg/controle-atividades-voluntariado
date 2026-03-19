@@ -48,7 +48,7 @@ public class ActivityService {
     }
 
 
-     @Transactional
+    @Transactional
     public void deleteActivity(Long id) {
         activityRepository.deleteById(id);
     }
@@ -83,6 +83,7 @@ public class ActivityService {
 
         Volunteer volunteer = volunteerRepository.findById(activityDTO.getVolunteerId())
                 .orElseThrow(() -> new RuntimeException("Volunteer não encontrado."));
+
         existingActivity.setVolunteer(volunteer);
 
         Activity updatedActivity = activityRepository.save(existingActivity);
