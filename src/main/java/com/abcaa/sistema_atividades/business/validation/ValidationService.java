@@ -1,0 +1,28 @@
+package com.abcaa.sistema_atividades.business.validation;
+
+import com.abcaa.sistema_atividades.business.dto.ActivityDTO;
+import com.abcaa.sistema_atividades.business.entities.Activity;
+import com.abcaa.sistema_atividades.business.enums.ActivityStatus;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+
+@Service
+public class ValidationService {
+
+    public void validateActivity(ActivityDTO dto) {
+        if (dto.getDate().isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Não é permitido registrar atividades com data futura.");
+        }
+
+        if (dto.getDurationMinutes() <= 0) {
+            throw new IllegalArgumentException("A duração deve ser maior que zero.");
+        }
+    }
+
+    public void validateActivityUpdate(Activity activity) {
+        if (activity.getActivityStatus() != ActivityStatus.PENDING) {
+            throw new IllegalStateException("Não é permitido editar atividades já aprovadas ou rejeitadas.");
+        }
+    }
+}
