@@ -7,7 +7,6 @@ import com.abcaa.sistema_atividades.business.enums.UserType;
 import com.abcaa.sistema_atividades.business.mapper.VolunteerMapper;
 import com.abcaa.sistema_atividades.business.repositories.DepartmentRepository;
 import com.abcaa.sistema_atividades.business.repositories.VolunteerRepository;
-import com.abcaa.sistema_atividades.business.enums.UserType;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -86,11 +85,6 @@ public class VolunteerService {
         volunteerRepository.deleteById(volunteer.getId());
     }
 
-    public VolunteerDTO updateUserType(Long id, UserType userType) {
-        Volunteer volunteer = volunteerRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado."));
-        volunteer.setUserType(userType);
-        return volunteerMapper.toDTO(volunteerRepository.save(volunteer));
-    }
+
 
 }
