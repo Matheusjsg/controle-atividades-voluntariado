@@ -1,6 +1,7 @@
 package com.abcaa.sistema_atividades.controller;
 
 import com.abcaa.sistema_atividades.business.dto.VolunteerDTO;
+import com.abcaa.sistema_atividades.business.enums.UserType;
 import com.abcaa.sistema_atividades.business.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -78,8 +80,14 @@ public class VolunteerController {
         return ResponseEntity.ok(volunteerService.volunteerUpdate(id, dto));
     }
 
-
-
-
+    @PatchMapping("/{id}/usertype")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Alterar tipo de usuário", description = "Admin altera o tipo de um voluntário para VOLUNTEER ou ADMIN")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Tipo atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Voluntário não encontrado")})
+    public ResponseEntity<VolunteerDTO> updateUserType(@PathVariable Long id, @RequestParam UserType userType) {
+        return ResponseEntity.ok(volunteerService.updateUserType(id, userType));
+    }
 
 }
