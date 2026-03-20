@@ -7,4 +7,5 @@ INSERT INTO tb_department (name) VALUES
 ('Design e Audiovisual'),
 ('Jurídico'),
 ('Pedagógico e Educacional'),
-('Saúde e Bem-estar');
+('Saúde e Bem-estar'),
+('Administração Geral');
