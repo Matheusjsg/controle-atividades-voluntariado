@@ -60,6 +60,7 @@ public class SecurityConfig {
                         .requestMatchers("/departments/create", "/departments/delete/**", "/departments/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/activity/*/status").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/activity/report/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/certificate/generate/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
