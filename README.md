@@ -2,10 +2,9 @@
 
 ## 📌 Sobre o projeto
 
-Este projeto é um sistema simples para registro de atividades realizadas por voluntários.
-O objetivo é permitir que voluntários registrem as horas trabalhadas e descrevam as atividades realizadas, possibilitando o acompanhamento das horas de voluntariado pela organização.
+Sistema para registro e acompanhamento de atividades realizadas por voluntários da **Associação Beneficiente e Cultural Amor em Ação**.
 
-O sistema também permitirá a geração de relatórios para controle de horas e emissão de certificados.
+Permite registro de horas, aprovação de atividades e geração de certificados de voluntariado.
 
 ---
 
@@ -14,69 +13,24 @@ O sistema também permitirá a geração de relatórios para controle de horas e
 * Java 21
 * Spring Boot 3.5.7
 * Spring Data JPA
-* Spring Validation
+* Spring Security + JWT
 * Flyway (versionamento de banco)
 * PostgreSQL
 * Maven
+* iText7 (geração de PDF)
 * Swagger/OpenAPI (documentação da API)
 
 ---
 
-## 📊 Funcionalidades implementadas
+## 📊 Funcionalidades
 
-* Cadastro de setores da organização
-* Cadastro de voluntários
-* Registro de atividades realizadas
-* Controle de tempo de atividades
-* Listagem de registros de atividades
-* Sistema de aprovação de atividades (Pendente, Aprovada, Rejeitada)
-* Documentação interativa da API com Swagger
-
----
-
-## 🗂 Estrutura básica do sistema
-
-Principais entidades:
-
-**Voluntário**
-
-* Nome
-* Email
-* Setor
-* Tipo de usuário (Voluntário ou Administrador)
-
-**Setor**
-
-* Nome do setor
-
-**Atividade**
-
-* Data
-* Tempo de atividade (em minutos)
-* Descrição
-* Voluntário responsável
-* Status (Pendente, Aprovada, Rejeitada)
-
----
-
-## ⏱ Controle de horas
-
-O tempo de atividade é registrado em minutos, permitindo intervalos como:
-
-* 30 minutos
-* 1 hora (60 minutos)
-* 1h30 (90 minutos)
-* 2 horas (120 minutos)
-* 2h30 (150 minutos)
-* 3 horas (180 minutos)
-* 3h30 (210 minutos)
-* 4 horas (240 minutos)
-* 5 horas (300 minutos)
-
-Esses registros permitem acompanhar ciclos de:
-
-* **20 horas de voluntariado**
-* **45 dias de participação**
+* ✅ Autenticação JWT
+* ✅ Cadastro de setores e voluntários
+* ✅ Registro de atividades com validações
+* ✅ Sistema de aprovação (Pendente, Aprovada, Rejeitada)
+* ✅ Relatórios de horas com filtro por período
+* ✅ Geração de certificados em PDF (mínimo 20h)
+* ✅ Documentação Swagger
 
 ---
 
@@ -85,36 +39,48 @@ Esses registros permitem acompanhar ciclos de:
 ### Pré-requisitos
 
 * Java 21 ou superior
-* PostgreSQL instalado e rodando
+* PostgreSQL 15+
 * Maven 3.6+
 
-### Configuração do Banco de Dados
-
-1. Crie um banco de dados PostgreSQL:
-```sql
-CREATE DATABASE sistema_atividades;
-```
-
-2. Configure as credenciais no arquivo `src/main/resources/application.properties`:
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/sistema_atividades
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
-
-spring.jpa.hibernate.ddl-auto=validate
-spring.flyway.enabled=true
-```
-
-### Executando a aplicação
+### 1. Clonar o repositório
 
 ```bash
-# Clone o repositório
-git clone <https://github.com/Matheusjsg/controle-atividades-voluntariado.git>
+git clone https://github.com/seu-usuario/sistema-voluntariado-abcaa.git
+cd sistema-voluntariado-abcaa
+```
 
-# Entre no diretório
-cd sistema-atividades
+### 2. Configurar Banco de Dados
 
-# Execute com Maven
+```sql
+CREATE DATABASE "ong-abcaa";
+```
+
+### 3. Configurar variáveis de ambiente
+
+**Copie o arquivo de exemplo:**
+```bash
+cp .env.example .env
+```
+
+**Edite o arquivo `.env` com suas configurações locais:**
+```bash
+nano .env
+```
+
+**Variáveis obrigatórias:**
+```env
+DB_PASSWORD=sua_senha_postgres
+DB_URL=jdbc:postgresql://localhost:5432/ong-abcaa
+DB_USER=postgres
+JWT_SECRET=seu-secret-local  # Gerar com: openssl rand -base64 64
+ADMIN_EMAIL=admin@localhost.dev
+ADMIN_PASSWORD=admin123
+```
+
+### 4. Executar a aplicação
+
+```bash
+mvn clean install
 mvn spring-boot:run
 ```
 
@@ -122,65 +88,155 @@ A aplicação estará disponível em: `http://localhost:8080`
 
 ---
 
-## 📡 Documentação da API
+## 🔐 Primeiro Acesso
 
-Após iniciar a aplicação, acesse a documentação interativa Swagger:
+Ao iniciar, o sistema cria automaticamente um usuário admin com as credenciais do `.env`:
+
+```
+Email: admin@localhost.dev (ou o configurado em ADMIN_EMAIL)
+Senha: admin123 (ou a configurada em ADMIN_PASSWORD)
+```
+
+**⚠️ IMPORTANTE:** Altere a senha após o primeiro login!
+
+---
+
+## 📡 Documentação da API
 
 **Swagger UI:** `http://localhost:8080/swagger-ui.html`
 
-### Endpoints disponíveis:
+### Principais Endpoints:
 
-**Setores**
-* `POST /departments/create` - Cadastrar novo setor
-* `GET /departments/list` - Listar todos os setores
+**Autenticação:**
+* `POST /auth/login` - Login
+* `POST /auth/register` - Registrar voluntário
 
-**Voluntários**
-* `POST /volunteer/create` - Cadastrar novo voluntário
-* `GET /volunteer/list` - Listar todos os voluntários
+**Atividades:**
+* `POST /activity/create` - Registrar atividade
+* `GET /activity/listAll` - Listar todas
+* `PATCH /activity/{id}/status` - Aprovar/Rejeitar (Admin)
 
-**Atividades**
-* `POST /activity/create` - Registrar nova atividade
-* `GET /activity/list` - Listar todas as atividades
+**Relatórios:**
+* `GET /activity/report/{volunteerId}?startDate=2025-01-01&endDate=2025-12-31`
 
----
-
-## 🗄️ Banco de Dados
-
-O projeto utiliza Flyway para versionamento do banco de dados.
-
-**Migrations disponíveis:**
-* V1 - Criação da tabela de setores
-* V2 - Criação da tabela de voluntários
-* V3 - Criação da tabela de atividades
-* V4 - Inserção de dados iniciais de setores
-* V5 - Inserção de dados iniciais de voluntários
-
-As migrations são executadas automaticamente ao iniciar a aplicação.
+**Certificados:**
+* `GET /certificate/generate/{volunteerId}?startDate=2025-01-01&endDate=2025-12-31`
 
 ---
 
-## 🚧 Status do projeto
+## 🗄️ Migrations
 
-Projeto em desenvolvimento.
+O Flyway gerencia automaticamente o banco de dados:
 
-**Funcionalidades implementadas:**
-* ✅ CRUD de setores
-* ✅ CRUD de voluntários
-* ✅ Registro de atividades
-* ✅ Sistema de status de atividades
-* ✅ Documentação Swagger
+* V1 - Tabela de departamentos
+* V2 - Tabela de voluntários
+* V3 - Tabela de atividades
+* V4 - Tabela de perfis de voluntários
+* V5 - Dados iniciais (departamentos)
 
-**Próximas funcionalidades:**
-* 🔲 Autenticação e autorização
-* 🔲 Relatórios de horas por voluntário
-* 🔲 Geração de certificados
-* 🔲 Interface web para voluntários
-* 🔲 Dashboard administrativo
+**⚠️ NUNCA edite migrations já executadas!** Crie novas (V6, V7, etc.)
 
 ---
 
-## 👨💻 Autor
+## 🔒 Segurança
 
-Desenvolvido por **Matheus Jesus**
+### Arquivos que NÃO devem ser commitados:
 
-Projeto desenvolvido como iniciativa de apoio ao registro e acompanhamento de atividades de voluntariado.
+* `.env` - Contém credenciais locais
+* `.env.production` - Contém credenciais de produção
+* `application-local.properties`
+
+### Gerar secrets fortes:
+
+```bash
+# JWT Secret (256 bits)
+openssl rand -base64 64
+
+# Admin Password
+openssl rand -base64 32
+```
+
+---
+
+## 🚀 Deploy em Produção
+
+### 1. Configurar variáveis de ambiente no servidor:
+
+```bash
+export DB_PASSWORD="senha_forte_producao"
+export JWT_SECRET="secret_gerado_256_bits"
+export ADMIN_EMAIL="admin@abcaa.org"
+export ADMIN_PASSWORD="senha_forte_admin"
+# ... demais variáveis
+```
+
+### 2. Build e execução:
+
+```bash
+mvn clean package -DskipTests
+java -jar target/Backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+```
+
+### 3. Com Docker:
+
+```bash
+docker-compose --env-file .env.production up -d
+```
+
+---
+
+## 📝 Estrutura do Projeto
+
+```
+src/main/java/com/abcaa/sistema_atividades/
+├── business/
+│   ├── dto/              # Data Transfer Objects
+│   ├── entities/         # Entidades JPA
+│   ├── enums/            # Enumerações
+│   ├── mapper/           # Conversores DTO <-> Entity
+│   ├── repositories/     # Repositórios JPA
+│   ├── service/          # Lógica de negócio
+│   └── validation/       # Validações customizadas
+├── controller/           # Controllers REST
+└── infrastructure/
+    ├── config/           # Configurações
+    ├── docs/             # Swagger
+    ├── exception/        # Tratamento de erros
+    └── security/         # JWT e Security
+```
+
+---
+
+## 🧪 Testes
+
+```bash
+# Executar testes
+mvn test
+
+# Executar com cobertura
+mvn clean test jacoco:report
+```
+
+---
+
+## 🤝 Contribuindo
+
+1. Fork o projeto
+2. Crie uma branch: `git checkout -b feature/nova-funcionalidade`
+3. Commit suas mudanças: `git commit -m 'Adiciona nova funcionalidade'`
+4. Push para a branch: `git push origin feature/nova-funcionalidade`
+5. Abra um Pull Request
+
+---
+
+## 📄 Licença
+
+Este projeto é de uso interno da **Associação Beneficiente e Cultural Amor em Ação**.
+
+---
+
+## 👥 Equipe
+
+Desenvolvido pela equipe de Tecnologia da ABCAA.
+
+**Contato:** admin@abcaa.org
