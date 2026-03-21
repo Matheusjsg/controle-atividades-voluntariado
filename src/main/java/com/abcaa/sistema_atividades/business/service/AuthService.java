@@ -55,7 +55,8 @@ public class AuthService {
         volunteerRepository.save(volunteer);
 
         String token = jwtService.generateToken(volunteer);
-        return new TokenDTO(token, volunteer.getName(), volunteer.getUserType().name());
+        return new TokenDTO(token, volunteer.getName(), volunteer.getId(),
+                                   volunteer.getDepartment().getId(), volunteer.getUserType().name());
     }
 
     public TokenDTO login(LoginDTO dto) {
@@ -66,6 +67,7 @@ public class AuthService {
                 .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado."));
 
         String token = jwtService.generateToken(volunteer);
-        return new TokenDTO(token, volunteer.getName(), volunteer.getUserType().name());
+        return new TokenDTO(token, volunteer.getName(), volunteer.getId(),
+                                   volunteer.getDepartment().getId(), volunteer.getUserType().name());
     }
 }
