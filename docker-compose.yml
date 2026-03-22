@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: abcaa-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ong-abcaa
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - abcaa-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ong-abcaa"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: abcaa-backend
+    restart: unless-stopped
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/ong-abcaa
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_NAME: ${ADMIN_NAME}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      CERTIFICATE_ORG_NAME: ${CERTIFICATE_ORG_NAME}
+      CERTIFICATE_ORG_CNPJ: ${CERTIFICATE_ORG_CNPJ}
+      CERTIFICATE_ORG_CITY: ${CERTIFICATE_ORG_CITY}
+      CERTIFICATE_ORG_STATE: ${CERTIFICATE_ORG_STATE}
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - abcaa-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  abcaa-network:
+    driver: bridge

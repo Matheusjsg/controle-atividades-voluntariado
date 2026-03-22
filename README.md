@@ -309,8 +309,35 @@ java -jar target/Backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 
 ### 3. Com Docker:
 
+**Opção 1: Apenas a aplicação (banco externo)**
 ```bash
+# Build da imagem
+docker build -t abcaa-backend .
+
+# Executar container
+docker run -d \
+  --name abcaa-backend \
+  -p 8080:8080 \
+  --env-file .env \
+  abcaa-backend
+```
+
+**Opção 2: Aplicação + PostgreSQL (docker-compose)**
+```bash
+# Desenvolvimento
+docker-compose up -d
+
+# Produção (com arquivo .env.production)
 docker-compose --env-file .env.production up -d
+
+# Ver logs
+docker-compose logs -f backend
+
+# Parar serviços
+docker-compose down
+
+# Parar e remover volumes (⚠️ apaga dados do banco)
+docker-compose down -v
 ```
 
 ---
