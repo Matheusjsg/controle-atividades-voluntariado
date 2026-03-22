@@ -4,8 +4,8 @@
 
 ### 1. Clone o repositório
 ```bash
-git clone https://github.com/seu-usuario/sistema-voluntariado-abcaa.git
-cd sistema-voluntariado-abcaa
+git clone https://github.com/abcaa-ong/volunteer-hours-log.git
+cd volunteer-hours-log/Backend
 ```
 
 ### 2. Configure suas variáveis locais
