@@ -17,6 +17,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -48,6 +53,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
@@ -56,15 +62,31 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/volunteer/list").permitAll()
                         .requestMatchers(HttpMethod.GET, "/departments/list").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/volunteer/profile").hasAnyRole("ADMIN", "VOLUNTEER")
+                        .requestMatchers(HttpMethod.PUT, "/volunteer/profile").hasAnyRole("ADMIN", "VOLUNTEER")
                         .requestMatchers("/volunteer/update/**", "/volunteer/delete/**", "/volunteer/{id}").hasRole("ADMIN")
                         .requestMatchers("/departments/create", "/departments/delete/**", "/departments/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/activity/*/status").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/activity/report/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/activity/report/**").hasAnyRole("ADMIN", "VOLUNTEER")
                         .requestMatchers(HttpMethod.GET, "/certificate/generate/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
