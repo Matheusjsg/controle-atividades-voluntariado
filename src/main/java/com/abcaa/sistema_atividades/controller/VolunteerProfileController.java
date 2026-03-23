@@ -22,6 +22,7 @@ public class VolunteerProfileController {
     }
 
     @PutMapping
+    @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Salvar perfil", description = "Cria ou atualiza os dados pessoais do voluntário autenticado")
     public ResponseEntity<VolunteerProfileDTO> save(@AuthenticationPrincipal Volunteer volunteer,
                                                      @RequestBody VolunteerProfileDTO dto) {

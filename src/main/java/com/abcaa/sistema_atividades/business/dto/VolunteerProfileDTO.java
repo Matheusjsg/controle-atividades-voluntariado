@@ -7,13 +7,13 @@ public class VolunteerProfileDTO {
     private Long id;
     private String cpf;
     private String phone;
-    private String logradouro;
-    private String numero;
-    private String complemento;
+    private String address;
+    private String number;
+    private String complement;
     private String bairro;
-    private String cidade;
-    private String estado;
-    private String cep;
+    private String city;
+    private String state;
+    private String zipCode;
     private LocalDate birthDate;
 
     public VolunteerProfileDTO() {}
@@ -24,20 +24,20 @@ public class VolunteerProfileDTO {
     public void setCpf(String cpf) { this.cpf = cpf; }
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
-    public String getLogradouro() { return logradouro; }
-    public void setLogradouro(String logradouro) { this.logradouro = logradouro; }
-    public String getNumero() { return numero; }
-    public void setNumero(String numero) { this.numero = numero; }
-    public String getComplemento() { return complemento; }
-    public void setComplemento(String complemento) { this.complemento = complemento; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+    public String getNumber() { return number; }
+    public void setNumber(String number) { this.number = number; }
+    public String getComplement() { return complement; }
+    public void setComplement(String complement) { this.complement = complement; }
     public String getBairro() { return bairro; }
     public void setBairro(String bairro) { this.bairro = bairro; }
-    public String getCidade() { return cidade; }
-    public void setCidade(String cidade) { this.cidade = cidade; }
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
-    public String getCep() { return cep; }
-    public void setCep(String cep) { this.cep = cep; }
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
+    public String getState() { return state; }
+    public void setState(String state) { this.state = state; }
+    public String getZipCode() { return zipCode; }
+    public void setZipCode(String zipCode) { this.zipCode = zipCode; }
     public LocalDate getBirthDate() { return birthDate; }
     public void setBirthDate(LocalDate birthDate) { this.birthDate = birthDate; }
 }

@@ -47,6 +47,44 @@ mvn spring-boot:run
 
 ---
 
+## 🐳 Executar com Docker (Alternativa)
+
+### Opção 1: Docker Compose (Recomendado)
+
+Executa a aplicação + PostgreSQL em containers:
+
+```bash
+# Iniciar todos os serviços
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f backend
+
+# Parar serviços
+docker-compose down
+```
+
+✅ Backend: `http://localhost:8080`  
+✅ PostgreSQL: `localhost:5432`
+
+### Opção 2: Apenas Docker (banco externo)
+
+```bash
+# Build da imagem
+docker build -t abcaa-backend .
+
+# Executar container
+docker run -d \
+  --name abcaa-backend \
+  -p 8080:8080 \
+  --env-file .env \
+  abcaa-backend
+```
+
+**Nota:** Certifique-se de que o PostgreSQL está rodando e acessível.
+
+---
+
 ## 🔐 Primeiro Acesso
 
 Ao iniciar, o sistema cria automaticamente um usuário admin:
@@ -254,6 +292,12 @@ O Flyway gerencia automaticamente o banco:
 - ✅ Voluntário precisa ter no mínimo 20 horas APROVADAS
 - ✅ Verificar se as variáveis CERTIFICATE_* estão no `.env`
 
+### Docker não inicia
+- ✅ Verificar se Docker e Docker Compose estão instalados
+- ✅ Verificar se as portas 5432 e 8080 estão livres
+- ✅ Conferir se o arquivo `.env` existe e está preenchido
+- ✅ Ver logs: `docker-compose logs -f`
+
 ---
 
 ## 🔒 Segurança
@@ -292,7 +336,14 @@ java -jar target/Backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 
 ### 3. Com Docker:
 ```bash
+# Desenvolvimento (usa .env)
+docker-compose up -d
+
+# Produção (usa .env.production)
 docker-compose --env-file .env.production up -d
+
+# Ver logs
+docker-compose logs -f backend
 ```
 
 ---
