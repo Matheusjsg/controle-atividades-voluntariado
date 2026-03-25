@@ -1,6 +1,7 @@
 package com.abcaa.sistema_atividades.infrastructure.security;
 
 import com.abcaa.sistema_atividades.business.repositories.VolunteerRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +32,9 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final VolunteerRepository volunteerRepository;
+
+    @Value("${cors.allowed-origins}")
+    private String allowedOrigins;
 
     public SecurityConfig(JwtFilter jwtFilter, VolunteerRepository volunteerRepository) {
         this.jwtFilter = jwtFilter;
@@ -77,8 +82,12 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:3000"));
+
+        List<String> origins = Arrays.asList(allowedOrigins.split(","));
+
+        configuration.setAllowedOriginPatterns(origins);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
