@@ -58,21 +58,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/volunteer/list").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/departments/list").hasAnyRole("ADMIN", "VOLUNTEER")
+                        .requestMatchers(HttpMethod.GET, "/departments/list").permitAll()
                         .requestMatchers(HttpMethod.GET, "/volunteer/profile").hasAnyRole("ADMIN", "VOLUNTEER")
                         .requestMatchers(HttpMethod.GET, "/volunteer/profile/{volunteerId}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/volunteer/profile").hasAnyRole("ADMIN", "VOLUNTEER")
                         .requestMatchers("/volunteer/update/**", "/volunteer/delete/**", "/volunteer/{id}").hasRole("ADMIN")
                         .requestMatchers("/departments/create", "/departments/delete/**", "/departments/update/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/activity/*/status").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/activity/*/status").hasAnyRole("ADMIN", "VOLUNTEER")
                         .requestMatchers(HttpMethod.GET, "/activity/report/**").hasAnyRole("ADMIN", "VOLUNTEER")
                         .requestMatchers(HttpMethod.GET, "/certificate/generate/**").authenticated()
                         .anyRequest().authenticated()
@@ -90,7 +92,7 @@ public class SecurityConfig {
 
         configuration.setAllowedOriginPatterns(origins);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
         
