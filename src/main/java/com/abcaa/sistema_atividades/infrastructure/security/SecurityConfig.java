@@ -60,9 +60,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/volunteer/list").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/departments/list").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/volunteer/list").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/departments/list").hasAnyRole("ADMIN", "VOLUNTEER")
                         .requestMatchers(HttpMethod.GET, "/volunteer/profile").hasAnyRole("ADMIN", "VOLUNTEER")
+                        .requestMatchers(HttpMethod.GET, "/volunteer/profile/{volunteerId}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/volunteer/profile").hasAnyRole("ADMIN", "VOLUNTEER")
                         .requestMatchers("/volunteer/update/**", "/volunteer/delete/**", "/volunteer/{id}").hasRole("ADMIN")
                         .requestMatchers("/departments/create", "/departments/delete/**", "/departments/update/**").hasRole("ADMIN")

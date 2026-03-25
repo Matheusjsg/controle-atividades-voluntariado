@@ -13,6 +13,17 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.properties.HorizontalAlignment;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.colors.DeviceRgb;
 
 @Service
 public class CertificateService {
@@ -63,102 +74,158 @@ public class CertificateService {
         Document document = new Document(pdf, PageSize.A4.rotate());
 
         // Margens
-        document.setMargins(80, 50, 80, 50);
+        // Aumentei a margem superior para empurrar o conteúdo mais para baixo
+        // (alteração solicitada pelo usuário para deixar o texto mais abaixo em relação ao fundo)
+        document.setMargins(180, 70, 80, 70);
 
-        // Espaço superior
-        document.add(new Paragraph("\n\n"));
+        // Fontes
+        PdfFont font;
+        PdfFont bold;
+        try {
+            font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
+            bold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+        } catch (Exception e) {
+            // fallback para caso de problema ao carregar fonte
+            font = null;
+            bold = null;
+        }
+
+        // Fundo único: usar imagem criada em src/main/resources/static/certificado.png como background
+        // Alteração: desenhar a imagem diretamente no canvas da primeira página cobrindo TODO o retângulo da página
+        // Isso evita áreas em branco no topo que podem ocorrer ao adicionar a imagem como elemento do Document.
+        try (java.io.InputStream is = getClass().getResourceAsStream("/static/certificado.png")) {
+            if (is != null) {
+                byte[] imgBytes = is.readAllBytes();
+                com.itextpdf.io.image.ImageData imgData = ImageDataFactory.create(imgBytes);
+                try {
+                    // desenha a imagem diretamente no conteúdo da página (plano de fundo)
+                    com.itextpdf.kernel.geom.Rectangle rect = pdf.getDefaultPageSize();
+                    PdfCanvas canvasBg = new PdfCanvas(pdf.getFirstPage());
+                    canvasBg.saveState();
+                    canvasBg.addImageFittedIntoRectangle(imgData, rect, false);
+                    canvasBg.restoreState();
+                } catch (Exception ignored) {
+                    // fallback: se não puder desenhar no canvas, adiciona como elemento para não quebrar a geração
+                    Image bg = new Image(imgData);
+                    float pageW = document.getPdfDocument().getDefaultPageSize().getWidth();
+                    float pageH = document.getPdfDocument().getDefaultPageSize().getHeight();
+                    bg.scaleToFit(pageW, pageH);
+                    bg.setFixedPosition(0, 0);
+                    try { bg.setOpacity(1f); } catch (Exception e) {}
+                    document.add(bg);
+                }
+            }
+        } catch (Exception ignored) {
+            // se não houver imagem de fundo, o certificado ainda é gerado sem decoração
+        }
 
         // Título
         Paragraph title = new Paragraph("CERTIFICADO DE VOLUNTARIADO")
-            .setFontSize(26)
-            .setBold()
-            .setTextAlignment(TextAlignment.CENTER);
+            .setFontSize(25)
+            .setTextAlignment(TextAlignment.CENTER)
+            .setMarginBottom(10)
+            .setBold();
+        if (bold != null) title.setFont(bold);
         document.add(title);
 
-        // Linha decorativa
-        document.add(new Paragraph("_______________________________________________")
-            .setTextAlignment(TextAlignment.CENTER)
-            .setMarginTop(10)
-            .setMarginBottom(30));
-
         // Texto introdutório
-        document.add(new Paragraph("Certificamos para os devidos fins que")
-            .setFontSize(14)
+        Paragraph intro = new Paragraph("Certificamos para os devidos fins que:")
+            .setFontSize(12)
             .setTextAlignment(TextAlignment.CENTER)
-            .setMarginBottom(20));
+              .setMarginBottom(20);
+        if (font != null) intro.setFont(font);
+        document.add(intro);
 
         // Nome do voluntário (destaque)
-        document.add(new Paragraph(report.getVolunteerName().toUpperCase())
-            .setFontSize(18)
-            .setBold()
+        Paragraph name = new Paragraph(report.getVolunteerName().toUpperCase())
+            .setFontSize(20)
             .setTextAlignment(TextAlignment.CENTER)
-            .setMarginBottom(20));
+            .setBold()
+            .setMarginBottom(20);
+        if (bold != null) name.setFont(bold);
+        document.add(name);
 
         // Conteúdo principal
         double hours = report.getTotalMinutes() / 60.0;
         String periodText = formatPeriod(startDate, endDate);
-        
+        String hoursFormatted = String.format(Locale.forLanguageTag("pt-BR"), "%.1f", hours);
+        String activitiesLabel = report.getTotalActivities() > 1 ? "atividades aprovadas" : "atividade aprovada";
+
         String contentText = String.format(
-            "Participou como voluntário(a) online no setor de %s, cumprindo um total de %.1f horas " +
-            "de trabalho voluntário, através de %d atividade%s aprovada%s, %s.",
+            "Participou como voluntário(a) online no setor de %s, cumprindo um total de %s horas de trabalho voluntário, por meio de %d %s, %s.",
             report.getDepartment(),
-            hours,
+            hoursFormatted,
             report.getTotalActivities(),
-            report.getTotalActivities() > 1 ? "s" : "",
-            report.getTotalActivities() > 1 ? "s" : "",
+            activitiesLabel,
             periodText
         );
 
-        document.add(new Paragraph(contentText)
-            .setFontSize(13)
+        Paragraph content = new Paragraph(contentText)
+            .setFontSize(12)
             .setTextAlignment(TextAlignment.JUSTIFIED)
-            .setMarginTop(10)
-            .setMarginBottom(40));
+            .setMarginTop(8)
+            .setMarginBottom(10);
+        content.setMaxWidth(620); // limitar largura para melhorar a formatação justificada
+        content.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        if (font != null) content.setFont(font);
+        document.add(content);
 
         // Data e local de emissão
         LocalDate today = LocalDate.now();
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", Locale.forLanguageTag("pt-BR"));
         String formattedDate = today.format(dateFormatter);
 
-        document.add(new Paragraph(String.format("%s - %s, %s", organizationCity, organizationState, formattedDate))
+        Paragraph localDate = new Paragraph(String.format("%s - %s, %s", organizationCity, organizationState, formattedDate))
             .setFontSize(12)
             .setTextAlignment(TextAlignment.CENTER)
-            .setMarginTop(50)
-            .setMarginBottom(40));
+                .setMarginTop(10)
+                .setMarginBottom(10);
+        if (font != null) localDate.setFont(font);
+        document.add(localDate);
 
-        // Assinatura
-        document.add(new Paragraph("_____________________________")
-            .setTextAlignment(TextAlignment.CENTER)
-            .setMarginTop(20));
+        // Rodapé institucional (sem assinatura)
+        String certNumber = String.format("CERT-%s-%d",
+            LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")),
+            volunteerId == null ? 0L : volunteerId);
 
-        document.add(new Paragraph(organizationName)
-            .setFontSize(11)
-            .setBold()
-            .setTextAlignment(TextAlignment.CENTER)
-            .setMarginTop(5));
-
-        document.add(new Paragraph("CNPJ: " + organizationCnpj)
+        Paragraph footerCert = new Paragraph(String.format("Certificado nº: %s", certNumber))
             .setFontSize(10)
             .setTextAlignment(TextAlignment.CENTER)
-            .setMarginTop(3));
+            .setMarginTop(18);
+        if (font != null) footerCert.setFont(font);
+        document.add(footerCert);
+
+        Paragraph orgLine = new Paragraph(String.format("%s • CNPJ: %s", organizationName, organizationCnpj))
+            .setFontSize(10)
+            .setTextAlignment(TextAlignment.CENTER)
+            .setMarginTop(6);
+        if (bold != null) orgLine.setFont(bold);
+        document.add(orgLine);
+
+        Paragraph recordNote = new Paragraph("Registro de contribuição - sem necessidade de assinatura.")
+            .setFontSize(9)
+            .setTextAlignment(TextAlignment.CENTER)
+            .setMarginTop(2);
+        if (font != null) recordNote.setFont(font);
+        document.add(recordNote);
 
         document.close();
         return baos.toByteArray();
     }
 
     private String formatPeriod(LocalDate startDate, LocalDate endDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        
-        if (startDate != null && endDate != null) {
-            return String.format("no período de %s a %s", 
-                startDate.format(formatter), 
-                endDate.format(formatter));
-        } else if (startDate != null) {
-            return String.format("a partir de %s", startDate.format(formatter));
-        } else if (endDate != null) {
-            return String.format("até %s", endDate.format(formatter));
-        } else {
-            return "durante sua participação";
-        }
-    }
-}
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy").withLocale(Locale.forLanguageTag("pt-BR"));
+
+         if (startDate != null && endDate != null) {
+             return String.format("no período de %s a %s",
+                 startDate.format(formatter),
+                 endDate.format(formatter));
+         } else if (startDate != null) {
+             return String.format("a partir de %s", startDate.format(formatter));
+         } else if (endDate != null) {
+             return String.format("até %s", endDate.format(formatter));
+         } else {
+             return "durante sua participação";
+         }
+     }
+ }
