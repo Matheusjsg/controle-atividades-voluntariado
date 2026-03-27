@@ -33,4 +33,22 @@ public class AuthController {
     public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginDTO dto) {
         return ResponseEntity.ok(authService.login(dto));
     }
-}
+
+
+        @PostMapping("/forgot-password")
+        public ResponseEntity<?> forgotPassword(@RequestParam String email) {
+            authService.requestPasswordReset(email);
+            return ResponseEntity.ok("Email enviado");
+        }
+
+        @PostMapping("/reset-password")
+        public ResponseEntity<?> resetPassword(
+                @RequestParam String token,
+                @RequestParam String password) {
+
+            authService.resetPassword(token, password);
+            return ResponseEntity.ok("Senha redefinida");
+        }
+    }
+
+
