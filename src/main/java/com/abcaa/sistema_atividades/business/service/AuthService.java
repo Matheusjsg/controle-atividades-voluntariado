@@ -3,6 +3,7 @@ package com.abcaa.sistema_atividades.business.service;
 import com.abcaa.sistema_atividades.business.dto.LoginDTO;
 import com.abcaa.sistema_atividades.business.dto.RegisterDTO;
 import com.abcaa.sistema_atividades.business.dto.TokenDTO;
+import com.abcaa.sistema_atividades.business.dto.VolunteerDTO;
 import com.abcaa.sistema_atividades.business.entities.Department;
 import com.abcaa.sistema_atividades.business.entities.PasswordResetToken;
 import com.abcaa.sistema_atividades.business.entities.Volunteer;
@@ -35,6 +36,7 @@ public class AuthService {
     private final PasswordResetTokenRepository tokenRepository;
     private final EmailService emailService;
 
+
     public AuthService(VolunteerRepository volunteerRepository, DepartmentRepository departmentRepository,
                        PasswordEncoder passwordEncoder, JwtService jwtService,
                        AuthenticationManager authenticationManager, PasswordResetTokenRepository tokenRepository, EmailService emailService) {
@@ -45,6 +47,7 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
         this.tokenRepository = tokenRepository;
         this.emailService = emailService;
+
     }
 
     public TokenDTO register(RegisterDTO dto) {
@@ -87,7 +90,7 @@ public class AuthService {
 
     public void requestPasswordReset(String email) {
         Volunteer user = volunteerRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(()-> new RuntimeException("Email não encontrado"));
 
         String token = UUID.randomUUID().toString();
 

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name= "tb_password_reset_tokens")
+@Table(name= "tb_password_reset_token")
 public class PasswordResetToken {
 
     @Id
@@ -18,6 +18,7 @@ public class PasswordResetToken {
     private LocalDateTime expiration;
 
     @ManyToOne
+    @JoinColumn(name = "volunteer_id")
     private Volunteer volunteerId;
 
 
