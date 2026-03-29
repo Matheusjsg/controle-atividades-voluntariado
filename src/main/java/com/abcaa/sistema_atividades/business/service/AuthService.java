@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.itextpdf.styledxmlparser.jsoup.nodes.Document.OutputSettings.Syntax.html;
+
 @Service
 public class AuthService {
 
@@ -101,9 +103,13 @@ public class AuthService {
 
         tokenRepository.save(resetToken);
 
-        String link = resetToken + "/auth/reset-password?token=" + token;
+        String link = resetPasswordUrl + "/reset-password?token=" + token;
 
-        emailService.sendEmail(user.getEmail(), "Recuperação de senha", link);
+        //FORMA DE ENVIAR O LINK DE RECUPERAÇÃO DE SENHA POR EMAIL COM UM TEMPLATE HTML
+        String htmlContent= emailService.htmlEmailTemplate(link);
+
+        emailService.sendHtmlEmail(email, "Recuperação de senha", htmlContent);
+
     }
 
     public void resetPassword(String token, String newPassword) {
