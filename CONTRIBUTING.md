@@ -1,102 +1,64 @@
-# Guia de Contribuição
+# Como contribuir
 
-## 🚀 Configuração Inicial
+Obrigado por querer contribuir com este projeto da ABCAA! Siga as instruções abaixo.
 
-### 1. Clone o repositório
+## Fluxo de trabalho
+
+1. Verifique as [Issues abertas](../../issues) antes de começar
+2. Comente na Issue que deseja trabalhar ou abra uma nova
+3. Crie uma branch a partir da `main`:
+
 ```bash
-git clone https://github.com/abcaa-ong/volunteer-hours-log.git
-cd volunteer-hours-log/Backend
+git checkout -b tipo/descricao-curta
+# Exemplos:
+# feat/cadastro-voluntarios
+# fix/erro-login
+# docs/atualiza-readme
 ```
 
-### 2. Configure suas variáveis locais
-```bash
-cp .env.example .env
-nano .env  # Edite com suas configurações
-```
+4. Faça seus commits seguindo o padrão abaixo
+5. Abra um Pull Request para a branch `main`
+6. Aguarde a revisão do líder do squad
 
-### 3. Configure o banco de dados
-```sql
-CREATE DATABASE "ong-abcaa";
-```
+---
 
-### 4. Execute a aplicação
-```bash
-mvn clean install
-mvn spring-boot:run
+## Padrão de commits
+
+```
+tipo: descrição curta no imperativo
+
+Exemplos:
+feat: adiciona formulário de cadastro
+fix: corrige erro na validação de e-mail
+docs: atualiza instruções de instalação
+style: ajusta espaçamento no header
+refactor: reorganiza lógica do controller
+test: adiciona testes para rota de login
 ```
 
 ---
 
-## 🔒 Segurança
+## Padrão de branches
 
-### ⚠️ NUNCA commite:
-- ❌ Arquivo `.env`
-- ❌ Senhas ou tokens
-- ❌ Credenciais de banco
-- ❌ JWT secrets
-
-### ✅ SEMPRE:
-- Use `.env.example` como template
-- Gere seus próprios secrets locais
-- Mantenha credenciais fora do código
+| Tipo | Quando usar |
+|---|---|
+| `feat/` | Nova funcionalidade |
+| `fix/` | Correção de bug |
+| `docs/` | Documentação |
+| `refactor/` | Refatoração sem mudar comportamento |
+| `test/` | Testes |
 
 ---
 
-## 📝 Padrões de Código
+## Pull Requests
 
-### Commits
-```
-feat: adiciona nova funcionalidade
-fix: corrige bug na validação
-docs: atualiza README
-refactor: refatora serviço de atividades
-```
-
-### Branches
-```
-feature/nome-da-funcionalidade
-bugfix/descricao-do-bug
-hotfix/correcao-urgente
-```
+- Descreva claramente **o que** foi feito e **por quê**
+- Referencie a Issue relacionada: `Closes #123`
+- Adicione prints ou vídeos se houver mudança visual
+- O PR só será mergeado após aprovação do líder do squad
 
 ---
 
-## 🗄️ Migrations
+## Dúvidas?
 
-### ⚠️ REGRAS:
-1. **NUNCA** edite migrations já executadas
-2. **SEMPRE** crie novas migrations (V6, V7, etc.)
-3. Teste localmente antes de commitar
-
-### Criar nova migration:
-```sql
--- V6__descricao_da_mudanca.sql
-ALTER TABLE tb_volunteer ADD COLUMN telefone VARCHAR(20);
-```
-
----
-
-## 🧪 Testes
-
-Antes de abrir PR, execute:
-```bash
-mvn clean test
-mvn clean compile
-```
-
----
-
-## 🤝 Pull Requests
-
-1. Crie uma branch a partir de `main`
-2. Faça suas alterações
-3. Teste localmente
-4. Commit com mensagem descritiva
-5. Push e abra PR
-6. Aguarde code review
-
----
-
-## 📞 Dúvidas?
-
-Entre em contato com a equipe de tecnologia.
+Abra uma Issue com a label `pergunta` ou fale com o líder do seu squad.
