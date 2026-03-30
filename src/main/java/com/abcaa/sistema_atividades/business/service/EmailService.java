@@ -1,41 +1,44 @@
 package com.abcaa.sistema_atividades.business.service;
 
-import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
 
 @Service
     public class EmailService {
 
-    private final JavaMailSender mailSender;
 
-    @Value("${spring.mail.username}")
-    private String from;
+    @Value("${resend.api.key}")
+    private String apiKey;
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    private final String URL = "https://api.resend.com/emails";
+
+    public void sendHtmlEmail(String to, String subject, String html) {
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + apiKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, Object> body = Map.of(
+                "from", "onboarding@resend.dev",
+                "to", new String[]{to},
+                "subject", subject,
+                "html", html
+        );
+
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+
+        restTemplate.postForEntity(URL, request, String.class);
     }
 
 
-    public void sendHtmlEmail(String to, String subject, String htmlContent) {
-        try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-            helper.setFrom(from);
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(htmlContent, true);
-
-            mailSender.send(message);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao enviar email", e);
-        }
-    }
 
     public String htmlEmailTemplate(String link) {
         String html = """
