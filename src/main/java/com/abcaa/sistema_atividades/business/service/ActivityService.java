@@ -88,6 +88,7 @@ public class ActivityService {
         validationService.validateActivity(activityDTO);
 
         existingActivity.setDate(activityDTO.getDate());
+        existingActivity.setTitle(activityDTO.getTitle());
         existingActivity.setDescription(activityDTO.getDescription());
         existingActivity.setDurationMinutes(activityDTO.getDurationMinutes());
 

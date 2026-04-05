@@ -12,6 +12,8 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title;
+
     private LocalDate date;
 
     private String description;
@@ -30,14 +32,17 @@ public class Activity {
 
     public Activity() {}
 
-    public Activity(Long id, LocalDate date, String description, Integer durationMinutes, Volunteer volunteer, ActivityStatus activityStatus) {
+    public Activity(Long id, String title, LocalDate date, String description, Integer durationMinutes, Volunteer volunteer, ActivityStatus activityStatus) {
         this.id = id;
+        this.title = title;
         this.date = date;
         this.description = description;
         this.durationMinutes = durationMinutes;
         this.volunteer = volunteer;
         this.activityStatus = activityStatus;
     }
+
+
 
     public Long getId() {
         return id;
@@ -49,6 +54,14 @@ public class Activity {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setDate(LocalDate date) {

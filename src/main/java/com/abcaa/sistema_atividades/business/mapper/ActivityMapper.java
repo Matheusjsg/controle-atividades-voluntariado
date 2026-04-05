@@ -14,6 +14,7 @@ public class ActivityMapper {
         Activity activity = new Activity();
 
         activity.setDate(dto.getDate());
+        activity.setTitle(dto.getTitle());
         activity.setDescription(dto.getDescription());
         activity.setDurationMinutes(dto.getDurationMinutes());
         activity.setVolunteer(volunteer);
@@ -29,7 +30,10 @@ public class ActivityMapper {
 
         dto.setId(activity.getId());
         dto.setDate(activity.getDate());
+        dto.setTitle(activity.getTitle());
         dto.setDescription(activity.getDescription());
+        dto.setDepartmentId(activity.getVolunteer().getDepartment().getId());
+        dto.setDepartmentName(activity.getVolunteer().getDepartment().getName());
         dto.setDurationMinutes(activity.getDurationMinutes());
         dto.setVolunteerId(activity.getVolunteer().getId());
         dto.setVolunteerName(activity.getVolunteer().getName());
