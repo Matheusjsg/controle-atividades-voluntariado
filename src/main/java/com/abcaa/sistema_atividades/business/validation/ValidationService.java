@@ -18,11 +18,15 @@ public class ValidationService {
         if (dto.getDurationMinutes() <= 0) {
             throw new IllegalArgumentException("A duração deve ser maior que zero.");
         }
+
+        if (dto.getTitle() == null || dto.getTitle().isBlank()) {
+            throw new IllegalArgumentException("O título da atividade é obrigatório.");
+        }
     }
 
     public void validateActivityUpdate(Activity activity) {
         if (activity.getActivityStatus() != ActivityStatus.PENDING) {
-            throw new IllegalStateException("Não é permitido editar atividades já aprovadas ou rejeitadas.");
+            throw new IllegalStateException("Não é permitido editar atividades já aprovadas.");
         }
     }
 }

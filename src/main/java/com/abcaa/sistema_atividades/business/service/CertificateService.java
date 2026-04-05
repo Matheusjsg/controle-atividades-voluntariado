@@ -152,7 +152,7 @@ public class CertificateService {
         String activitiesLabel = report.getTotalActivities() > 1 ? "atividades aprovadas" : "atividade aprovada";
 
         String contentText = String.format(
-            "Participou como voluntário(a) online no setor de %s, cumprindo um total de %s horas de trabalho voluntário, por meio de %d %s, %s.",
+            "Participou como voluntário(a) no setor de %s, cumprindo um total de %s horas de trabalho voluntário, por meio de %d %s, %s.",
             report.getDepartment(),
             hoursFormatted,
             report.getTotalActivities(),

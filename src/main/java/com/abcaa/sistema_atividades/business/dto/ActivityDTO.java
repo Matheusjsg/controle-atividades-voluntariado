@@ -13,6 +13,9 @@ public class ActivityDTO {
     @Schema(description = "Data de realização da atividade", example = "2024-01-15", required = true)
     private LocalDate date;
 
+    @Schema(description = "Titulo da atividade", example = "Distribuição de atividades")
+    private String title;
+
     @Schema(description = "Descrição detalhada da atividade realizada", example = "Organização de doações e atendimento ao público")
     private String description;
 
@@ -26,21 +29,38 @@ public class ActivityDTO {
     @Schema(description = "Nome do voluntário responsável", example = "João Silva", accessMode = Schema.AccessMode.READ_ONLY)
     private String volunteerName;
 
+    @Schema(description = "ID do departamento do responsável da atividade", example = "5", required = true)
+    private Long departmentId;
+
+    @Schema(description = "Nome do departamento do responsável da atividade", example = "Administração", required = true)
+    private String departmentName;
+
     @Schema(description = "Status atual da atividade", example = "PENDING")
     private ActivityStatus activityStatus;
 
-    public ActivityDTO() {}
+    public ActivityDTO() {
+    }
 
-    public ActivityDTO(Long id, LocalDate date, String description, Integer durationMinutes, Long volunteerId, String volunteerName, ActivityStatus activityStatus) {
+    public ActivityDTO(Long id, LocalDate date, String title, String description, Integer durationMinutes, Long volunteerId, String volunteerName, Long departmentId, String departmentName, ActivityStatus activityStatus) {
         this.id = id;
         this.date = date;
+        this.title = title;
         this.description = description;
         this.durationMinutes = durationMinutes;
         this.volunteerId = volunteerId;
         this.volunteerName = volunteerName;
+        this.departmentId = departmentId;
+        this.departmentName = departmentName;
         this.activityStatus = activityStatus;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Long getId() {
         return id;
@@ -88,6 +108,22 @@ public class ActivityDTO {
 
     public void setVolunteerName(String volunteerName) {
         this.volunteerName = volunteerName;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     public ActivityStatus getActivityStatus() {
