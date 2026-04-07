@@ -2,6 +2,7 @@ package com.abcaa.sistema_atividades.controller;
 
 import com.abcaa.sistema_atividades.business.dto.ActivityDTO;
 import com.abcaa.sistema_atividades.business.dto.ActivityReportDTO;
+import com.abcaa.sistema_atividades.business.dto.PagedResponseDTO;
 import com.abcaa.sistema_atividades.business.enums.ActivityStatus;
 import com.abcaa.sistema_atividades.business.service.ActivityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,10 +67,12 @@ public class ActivityController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Voluntário não encontrado")})
-    public ResponseEntity<List<ActivityDTO>> findByAcity(@PathVariable Long volunteerId){
-        return ResponseEntity.ok(activityService.findByVolunteerId(volunteerId));
+    public ResponseEntity<PagedResponseDTO<ActivityDTO>> findByAcity(
+            @PathVariable Long volunteerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size){
+        return ResponseEntity.ok(activityService.findByVolunteerId(volunteerId, page, size));
     }
-
 
 
     @GetMapping("/list/{id}")
@@ -82,21 +85,24 @@ public class ActivityController {
     }
 
 
-
     @GetMapping("/listAll")
-    @Operation(summary = "Listar todas as atividades", description = "Retorna a lista completa de atividades registradas")
+    @Operation(summary = "Listar todas as atividades", description = "Retorna atividades paginadas. Padrão: página 0, 10 itens, ordenado por data decrescente.")
             @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")})
-    public ResponseEntity<List<ActivityDTO>> findAll(){
-        return ResponseEntity.ok(activityService.findAll());
+    public ResponseEntity<PagedResponseDTO<ActivityDTO>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12")int size){
+        return ResponseEntity.ok(activityService.findAll(page, size));
     }
 
 
-
     @GetMapping("/status/{status}")
-        @Operation(summary = "Listar atividades por status")
-    public ResponseEntity<List<ActivityDTO>> findByStatus(@PathVariable ActivityStatus status){
-        return ResponseEntity.ok(activityService.findActivitiesByStatus(status));
+    @Operation(summary = "Listar atividades por status", description = "Busca atividades paginadas por status, ordenadas por data decrescente.")
+    public ResponseEntity<PagedResponseDTO<ActivityDTO>> findByStatus(
+            @PathVariable ActivityStatus status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12")int size){
+        return ResponseEntity.ok(activityService.findActivitiesByStatus(status, page, size));
     }
 
 
@@ -108,6 +114,7 @@ public class ActivityController {
     public ResponseEntity<ActivityDTO> updateStatus(@PathVariable Long id, @RequestParam ActivityStatus status) {
         return ResponseEntity.ok(activityService.statusUpdate(id, status));
     }
+
 
     @GetMapping("/report/{volunteerId}")
     @Operation(summary = "Relatório de horas do voluntário", description = "Retorna o total de horas aprovadas de um voluntário, com filtro opcional por período")

@@ -1,5 +1,6 @@
 package com.abcaa.sistema_atividades.controller;
 
+import com.abcaa.sistema_atividades.business.dto.PagedResponseDTO;
 import com.abcaa.sistema_atividades.business.dto.VolunteerDTO;
 import com.abcaa.sistema_atividades.business.enums.UserType;
 import com.abcaa.sistema_atividades.business.service.VolunteerService;
@@ -50,12 +51,14 @@ public class VolunteerController {
     }
 
 
-    @Operation(summary = "Listar todos os voluntários", description = "Retorna a lista completa de voluntários cadastrados")
+    @Operation(summary = "Listar todos os voluntários", description = "Retorna a lista completa de voluntários cadastrados com paginação padrão")
             @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso") })
     @GetMapping("/list")
-    public ResponseEntity<List<VolunteerDTO>> findAll(){
-        return ResponseEntity.ok(volunteerService.findAll());
+    public ResponseEntity<PagedResponseDTO<VolunteerDTO>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size){
+        return ResponseEntity.ok(volunteerService.findAll(page, size));
     }
 
 

@@ -1,5 +1,6 @@
 package com.abcaa.sistema_atividades.business.service;
 
+import com.abcaa.sistema_atividades.business.dto.PagedResponseDTO;
 import com.abcaa.sistema_atividades.business.dto.VolunteerDTO;
 import com.abcaa.sistema_atividades.business.entities.Department;
 import com.abcaa.sistema_atividades.business.entities.Volunteer;
@@ -7,11 +8,14 @@ import com.abcaa.sistema_atividades.business.enums.UserType;
 import com.abcaa.sistema_atividades.business.mapper.VolunteerMapper;
 import com.abcaa.sistema_atividades.business.repositories.DepartmentRepository;
 import com.abcaa.sistema_atividades.business.repositories.VolunteerRepository;
-import com.abcaa.sistema_atividades.business.enums.UserType;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 
 @Service
@@ -41,11 +45,17 @@ public class VolunteerService {
     }
 
 
-    public List<VolunteerDTO> findAll(){
+    public PagedResponseDTO<VolunteerDTO> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+        Page<Volunteer> result = volunteerRepository.findAll(pageable);
 
-        List<Volunteer> findAll = volunteerRepository.findAllByOrderByNameAsc();
+        List<VolunteerDTO> content = result.getContent()
+                .stream()
+                .map(volunteerMapper::toDTO)
+                .collect(Collectors.toList());
 
-        return volunteerMapper.toDTOs(findAll);
+        return new PagedResponseDTO<>(content, result.getNumber(),
+                result.getSize(), result.getTotalElements(), result.getTotalPages());
     }
 
 

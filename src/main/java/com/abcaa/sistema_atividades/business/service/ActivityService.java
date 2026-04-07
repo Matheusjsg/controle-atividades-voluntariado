@@ -2,6 +2,7 @@ package com.abcaa.sistema_atividades.business.service;
 
 import com.abcaa.sistema_atividades.business.dto.ActivityDTO;
 import com.abcaa.sistema_atividades.business.dto.ActivityReportDTO;
+import com.abcaa.sistema_atividades.business.dto.PagedResponseDTO;
 import com.abcaa.sistema_atividades.business.entities.Activity;
 import com.abcaa.sistema_atividades.business.entities.Volunteer;
 import com.abcaa.sistema_atividades.business.enums.ActivityStatus;
@@ -10,6 +11,10 @@ import com.abcaa.sistema_atividades.business.repositories.ActivityRepository;
 import com.abcaa.sistema_atividades.business.repositories.VolunteerRepository;
 import com.abcaa.sistema_atividades.business.validation.ValidationService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
@@ -60,21 +65,36 @@ public class ActivityService {
         activityRepository.deleteById(id);
     }
 
+
     //buscar atividades pelo ID do voluntário
     @Transactional
-    public List<ActivityDTO> findByVolunteerId(Long volunteerId) {
-        return activityRepository.findByVolunteerId(volunteerId).stream()
+    public PagedResponseDTO<ActivityDTO> findByVolunteerId(Long volunteerId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<Activity> result = activityRepository.findByVolunteerId(volunteerId, pageable);
+
+        List<ActivityDTO> content = result.getContent()
+                .stream()
                 .map(activityMapper::toDTO)
                 .collect(Collectors.toList());
+
+        return new PagedResponseDTO<>(content, result.getNumber(),
+                result.getSize(), result.getTotalElements(), result.getTotalPages());
     }
 
 
     //buscar atividades por status
     @Transactional
-    public List<ActivityDTO> findActivitiesByStatus(ActivityStatus status) {
-        return activityRepository.findByActivityStatus(status).stream()
+    public PagedResponseDTO<ActivityDTO> findActivitiesByStatus(ActivityStatus status, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<Activity> result = activityRepository.findByActivityStatus(status, pageable);
+
+        List<ActivityDTO> content = result.getContent()
+                .stream()
                 .map(activityMapper::toDTO)
                 .collect(Collectors.toList());
+
+        return new PagedResponseDTO<>(content, result.getNumber(),
+                result.getSize(), result.getTotalElements(), result.getTotalPages());
     }
 
 
@@ -114,12 +134,20 @@ public class ActivityService {
     }
 
 
-    public List<ActivityDTO> findAll(){
-        return activityRepository.findAll()
+      public PagedResponseDTO<ActivityDTO> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<Activity> result = activityRepository.findAll(pageable);
+
+        List<ActivityDTO> content = result.getContent()
                 .stream()
                 .map(activityMapper::toDTO)
                 .collect(Collectors.toList());
+
+        return new PagedResponseDTO<>(content, result.getNumber(),
+                result.getSize(), result.getTotalElements(), result.getTotalPages());
     }
+
+
 
     public ActivityReportDTO getReport(Long volunteerId, LocalDate startDate, LocalDate endDate) {
         Volunteer volunteer = volunteerRepository.findById(volunteerId)

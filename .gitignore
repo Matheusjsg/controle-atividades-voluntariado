@@ -60,6 +60,9 @@ Thumbs.db
 *.db
 *.sqlite
 
+### Workspace local ###
+MyWorkSpace/
+
 ### Maven ###
 pom.xml.tag
 pom.xml.releaseBackup
