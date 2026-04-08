@@ -1,9 +1,9 @@
 package com.abcaa.sistema_atividades.controller;
 
-import com.abcaa.sistema_atividades.business.dto.LoginDTO;
-import com.abcaa.sistema_atividades.business.dto.RegisterDTO;
-import com.abcaa.sistema_atividades.business.dto.TokenDTO;
-import com.abcaa.sistema_atividades.business.service.AuthService;
+import com.abcaa.sistema_atividades.dto.LoginDTO;
+import com.abcaa.sistema_atividades.dto.RegisterDTO;
+import com.abcaa.sistema_atividades.dto.TokenDTO;
+import com.abcaa.sistema_atividades.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

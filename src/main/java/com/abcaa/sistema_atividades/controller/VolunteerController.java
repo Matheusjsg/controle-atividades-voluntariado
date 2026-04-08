@@ -1,9 +1,9 @@
 package com.abcaa.sistema_atividades.controller;
 
-import com.abcaa.sistema_atividades.business.dto.PagedResponseDTO;
-import com.abcaa.sistema_atividades.business.dto.VolunteerDTO;
-import com.abcaa.sistema_atividades.business.enums.UserType;
-import com.abcaa.sistema_atividades.business.service.VolunteerService;
+import com.abcaa.sistema_atividades.dto.PagedResponseDTO;
+import com.abcaa.sistema_atividades.dto.VolunteerDTO;
+import com.abcaa.sistema_atividades.domain.enums.UserType;
+import com.abcaa.sistema_atividades.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

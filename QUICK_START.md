@@ -228,20 +228,15 @@ POST /activity/create
 ```
 Backend/
 ├── src/main/java/com/abcaa/sistema_atividades/
-│   ├── business/
-│   │   ├── dto/              # Data Transfer Objects
-│   │   ├── entities/         # Entidades JPA
-│   │   ├── enums/            # ActivityStatus, UserType
-│   │   ├── mapper/           # Conversores DTO <-> Entity
-│   │   ├── repositories/     # Repositórios JPA
-│   │   ├── service/          # Lógica de negócio
-│   │   └── validation/       # Validações customizadas
 │   ├── controller/           # Controllers REST
-│   │   ├── ActivityController
-│   │   ├── AuthController
-│   │   ├── CertificateController
-│   │   ├── DepartmentController
-│   │   └── VolunteerController
+│   ├── service/              # Lógica de negócio
+│   ├── repository/           # Repositórios JPA
+│   ├── domain/
+│   │   ├── entity/           # Entidades JPA
+│   │   └── enums/            # ActivityStatus, UserType
+│   ├── dto/                  # Data Transfer Objects
+│   ├── mapper/               # Conversores DTO <-> Entity
+│   ├── validation/           # Validações customizadas
 │   └── infrastructure/
 │       ├── config/           # Configurações
 │       ├── docs/             # Swagger
@@ -266,6 +261,8 @@ O Flyway gerencia automaticamente o banco:
 - **V3** - Tabela de atividades
 - **V4** - Tabela de perfis de voluntários
 - **V5** - Dados iniciais (departamentos padrão)
+- **V6** - Tabela de tokens para reset de senha
+
 
 **⚠️ NUNCA edite migrations já executadas!** Crie novas versões (V6, V7, etc.)
 

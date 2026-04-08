@@ -1,8 +1,8 @@
 package com.abcaa.sistema_atividades.controller;
 
-import com.abcaa.sistema_atividades.business.dto.VolunteerProfileDTO;
-import com.abcaa.sistema_atividades.business.entities.Volunteer;
-import com.abcaa.sistema_atividades.business.service.VolunteerProfileService;
+import com.abcaa.sistema_atividades.dto.VolunteerProfileDTO;
+import com.abcaa.sistema_atividades.domain.entity.Volunteer;
+import com.abcaa.sistema_atividades.service.VolunteerProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;

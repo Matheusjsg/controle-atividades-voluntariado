@@ -1,6 +1,6 @@
 package com.abcaa.sistema_atividades.infrastructure.security;
 
-import com.abcaa.sistema_atividades.business.repositories.VolunteerRepository;
+import com.abcaa.sistema_atividades.repository.VolunteerRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
