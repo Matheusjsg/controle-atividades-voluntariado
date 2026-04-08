@@ -1,10 +1,10 @@
 package com.abcaa.sistema_atividades.infrastructure.config;
 
-import com.abcaa.sistema_atividades.business.entities.Department;
-import com.abcaa.sistema_atividades.business.entities.Volunteer;
-import com.abcaa.sistema_atividades.business.enums.UserType;
-import com.abcaa.sistema_atividades.business.repositories.DepartmentRepository;
-import com.abcaa.sistema_atividades.business.repositories.VolunteerRepository;
+import com.abcaa.sistema_atividades.domain.entity.Department;
+import com.abcaa.sistema_atividades.domain.entity.Volunteer;
+import com.abcaa.sistema_atividades.domain.enums.UserType;
+import com.abcaa.sistema_atividades.repository.DepartmentRepository;
+import com.abcaa.sistema_atividades.repository.VolunteerRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,6 +1,6 @@
 package com.abcaa.sistema_atividades.infrastructure.security;
 
-import com.abcaa.sistema_atividades.business.repositories.VolunteerRepository;
+import com.abcaa.sistema_atividades.repository.VolunteerRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

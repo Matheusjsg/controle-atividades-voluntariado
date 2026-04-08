@@ -1,10 +1,10 @@
 package com.abcaa.sistema_atividades.controller;
 
-import com.abcaa.sistema_atividades.business.dto.ActivityDTO;
-import com.abcaa.sistema_atividades.business.dto.ActivityReportDTO;
-import com.abcaa.sistema_atividades.business.dto.PagedResponseDTO;
-import com.abcaa.sistema_atividades.business.enums.ActivityStatus;
-import com.abcaa.sistema_atividades.business.service.ActivityService;
+import com.abcaa.sistema_atividades.dto.ActivityDTO;
+import com.abcaa.sistema_atividades.dto.ActivityReportDTO;
+import com.abcaa.sistema_atividades.dto.PagedResponseDTO;
+import com.abcaa.sistema_atividades.domain.enums.ActivityStatus;
+import com.abcaa.sistema_atividades.service.ActivityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

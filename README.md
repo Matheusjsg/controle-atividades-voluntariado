@@ -243,6 +243,8 @@ O Flyway gerencia automaticamente o banco de dados:
 * **V3** - Tabela de atividades (com status de aprovação)
 * **V4** - Tabela de perfis de voluntários (dados pessoais)
 * **V5** - Dados iniciais (departamentos padrão)
+* **V6** - Tabela de tokens para reset de senha
+* **V7** - add_title_to_activity.sql
 
 **⚠️ NUNCA edite migrations já executadas!** Crie novas (V6, V7, etc.)
 
@@ -347,34 +349,6 @@ docker-compose down -v
 ```
 Backend/
 ├── src/main/java/com/abcaa/sistema_atividades/
-│   ├── business/
-│   │   ├── dto/              # Data Transfer Objects
-│   │   │   ├── ActivityDTO
-│   │   │   ├── ActivityReportDTO
-│   │   │   ├── DepartmentDTO
-│   │   │   ├── LoginDTO
-│   │   │   ├── RegisterDTO
-│   │   │   ├── TokenDTO
-│   │   │   ├── VolunteerDTO
-│   │   │   └── VolunteerProfileDTO
-│   │   ├── entities/         # Entidades JPA
-│   │   │   ├── Activity
-│   │   │   ├── Department
-│   │   │   ├── Volunteer
-│   │   │   └── VolunteerProfile
-│   │   ├── enums/            # Enumerações
-│   │   │   ├── ActivityStatus (PENDING, APPROVED, REJECTED)
-│   │   │   └── UserType (VOLUNTEER, ADMIN)
-│   │   ├── mapper/           # Conversores DTO <-> Entity
-│   │   ├── repositories/     # Repositórios JPA
-│   │   ├── service/          # Lógica de negócio
-│   │   │   ├── ActivityService
-│   │   │   ├── AuthService
-│   │   │   ├── CertificateService
-│   │   │   ├── DepartmentService
-│   │   │   ├── VolunteerService
-│   │   │   └── VolunteerProfileService
-│   │   └── validation/       # Validações customizadas
 │   ├── controller/           # Controllers REST
 │   │   ├── ActivityController
 │   │   ├── AuthController
@@ -382,6 +356,28 @@ Backend/
 │   │   ├── DepartmentController
 │   │   ├── VolunteerController
 │   │   └── VolunteerProfileController
+│   ├── service/              # Lógica de negócio
+│   │   ├── ActivityService
+│   │   ├── AuthService
+│   │   ├── CertificateService
+│   │   ├── DepartmentService
+│   │   ├── EmailService
+│   │   ├── VolunteerService
+│   │   └── VolunteerProfileService
+│   ├── repository/           # Repositórios JPA
+│   ├── domain/
+│   │   ├── entity/           # Entidades JPA
+│   │   │   ├── Activity
+│   │   │   ├── Department
+│   │   │   ├── PasswordResetToken
+│   │   │   ├── Volunteer
+│   │   │   └── VolunteerProfile
+│   │   └── enums/            # Enumerações
+│   │       ├── ActivityStatus (PENDING, APPROVED, REJECTED)
+│   │       └── UserType (VOLUNTEER, ADMIN)
+│   ├── dto/                  # Data Transfer Objects
+│   ├── mapper/               # Conversores DTO <-> Entity
+│   ├── validation/           # Validações customizadas
 │   └── infrastructure/
 │       ├── config/           # Configurações
 │       ├── docs/             # Swagger
@@ -393,7 +389,9 @@ Backend/
 │   │   ├── V2__create_table_volunteer.sql
 │   │   ├── V3__create_table_activity.sql
 │   │   ├── V4__create_table_volunteer_profile.sql
-│   │   └── V5__insert_initial_data.sql
+│   │   ├── V5__insert_initial_data.sql
+│   │   ├── V6__create_password-reset_token.sql
+│   │   └── V7__add_title_to_activity.sql
 │   └── application.properties
 ├── .env.example              # Template de variáveis
 ├── .gitignore
