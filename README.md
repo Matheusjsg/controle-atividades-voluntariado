@@ -244,6 +244,7 @@ O Flyway gerencia automaticamente o banco de dados:
 * **V4** - Tabela de perfis de voluntários (dados pessoais)
 * **V5** - Dados iniciais (departamentos padrão)
 * **V6** - Tabela de tokens para reset de senha
+* **V7** - add_title_to_activity.sql
 
 **⚠️ NUNCA edite migrations já executadas!** Crie novas (V6, V7, etc.)
 
