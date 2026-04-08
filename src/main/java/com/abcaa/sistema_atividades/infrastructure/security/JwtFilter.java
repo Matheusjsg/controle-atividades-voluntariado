@@ -1,6 +1,7 @@
 package com.abcaa.sistema_atividades.infrastructure.security;
 
 import com.abcaa.sistema_atividades.repository.VolunteerRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +38,17 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String token = header.substring(7);
-        String email = jwtService.extractUsername(token);
+        String email;
+
+        try {
+            email = jwtService.extractUsername(token);
+        } catch (ExpiredJwtException e) {
+            writeUnauthorizedResponse(response, "Token expirado. faça login novamente.");
+            return;
+        } catch (Exception e) {
+            writeUnauthorizedResponse(response, "Token inválido");
+            return;
+        }
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails user = volunteerRepository.findByEmail(email).orElse(null);
@@ -51,4 +62,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         chain.doFilter(request, response);
     }
+
+    private void writeUnauthorizedResponse(HttpServletResponse response, String mensagem) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{\"status\":401,\"message\":\"" + mensagem + "\"}");
+    }
+
 }
