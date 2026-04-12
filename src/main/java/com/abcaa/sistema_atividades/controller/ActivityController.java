@@ -4,6 +4,7 @@ import com.abcaa.sistema_atividades.dto.ActivityDTO;
 import com.abcaa.sistema_atividades.dto.ActivityReportDTO;
 import com.abcaa.sistema_atividades.dto.PagedResponseDTO;
 import com.abcaa.sistema_atividades.domain.enums.ActivityStatus;
+import com.abcaa.sistema_atividades.dto.VolunteerRankingDTO;
 import com.abcaa.sistema_atividades.service.ActivityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -127,6 +128,17 @@ public class ActivityController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
         return ResponseEntity.ok(activityService.getReport(volunteerId, startDate, endDate));
+    }
+
+    @GetMapping("/ranking")
+    @Operation(summary = "Ranking de voluntários por horas", description = "Retorna voluntários ordenados por horas aprovadas. Filtre por período com startDate e endDate (opcional).")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ranking gerado com sucesso")})
+    public ResponseEntity<List<VolunteerRankingDTO>> getRanking(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+    ) {
+        return ResponseEntity.ok(activityService.getRanking(startDate, endDate));
     }
 
 

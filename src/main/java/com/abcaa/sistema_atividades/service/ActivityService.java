@@ -6,6 +6,7 @@ import com.abcaa.sistema_atividades.dto.PagedResponseDTO;
 import com.abcaa.sistema_atividades.domain.entity.Activity;
 import com.abcaa.sistema_atividades.domain.entity.Volunteer;
 import com.abcaa.sistema_atividades.domain.enums.ActivityStatus;
+import com.abcaa.sistema_atividades.dto.VolunteerRankingDTO;
 import com.abcaa.sistema_atividades.mapper.ActivityMapper;
 import com.abcaa.sistema_atividades.repository.ActivityRepository;
 import com.abcaa.sistema_atividades.repository.VolunteerRepository;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -181,4 +183,47 @@ public class ActivityService {
                 activityDTOs
         );
     }
+
+
+// Ranking de voluntários por horas aprovadas em um período.
+// startDate e endDate são opcionais:
+//   - Sem filtro  → acumulado geral de todos os tempos
+//   - Com filtro  → apenas atividades dentro do intervalo informado
+//
+// A posição (rank) é atribuída após a query, que já retorna ordenado
+// do maior para o menor. Em caso de empate, a ordem é alfabética
+// (definida pelo banco via ORDER BY na query).
+
+    public List<VolunteerRankingDTO> getRanking(LocalDate startDate, LocalDate endDate) {
+        List<Object[]> rows = activityRepository.findRanking(startDate, endDate);
+
+        List<VolunteerRankingDTO> ranking = new ArrayList<>();
+
+        for (int i = 0; i < rows.size(); i++) {
+            Object[] row = rows.get(i);
+
+            Long volunteerId= (Long) row[0];
+            String volunteerName= (String) row[1];
+            String departmentName= (String) row[2];
+            int totalMinutes= ((Number) row[3]).intValue();
+            int totalActivities= ((Number) row[4]).intValue();
+
+            // Posição começa em 1
+            ranking.add(new VolunteerRankingDTO(
+                    i + 1,
+                    volunteerId,
+                    volunteerName,
+                    departmentName,
+                    totalMinutes,
+                    totalActivities
+            ));
+        }
+
+        return ranking;
+    }
+
+
+
+
+
 }

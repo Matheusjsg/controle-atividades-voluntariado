@@ -19,16 +19,25 @@ public class VolunteerDTO {
     @Schema(description = "Tipo de usuário no sistema", example = "VOLUNTARIO")
     private UserType userType;
 
+    @Schema(description = "Minutos mensais do voluntário", example = "180")
+    private Integer monthlyMinutes;
+
+    @Schema(description = "Horas mensais do voluntário", example = "12")
+    private Double monthlyHours;
+
 
     public VolunteerDTO() {
     }
 
-    public VolunteerDTO(Long id, String name, String email, Long departmentId, UserType userType) {
+    public VolunteerDTO(Long id, String name, String email, Long departmentId, UserType userType, Integer monthlyMinutes, Double monthlyHours) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.departmentId = departmentId;
         this.userType = userType;
+        this.monthlyHours = monthlyHours;
+        this.monthlyMinutes = monthlyMinutes;
+
     }
 
     public Long getId() {
@@ -69,5 +78,21 @@ public class VolunteerDTO {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public Integer getMonthlyMinutes() {
+        return monthlyMinutes;
+    }
+
+    public void setMonthlyMinutes(Integer monthlyMinutes) {
+        this.monthlyMinutes = monthlyMinutes;
+    }
+
+    public Double getMonthlyHours() {
+        return monthlyHours;
+    }
+
+    public void setMonthlyHours(Double monthlyHours) {
+        this.monthlyHours = monthlyHours;
     }
 }
