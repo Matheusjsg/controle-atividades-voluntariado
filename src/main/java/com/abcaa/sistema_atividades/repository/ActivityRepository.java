@@ -85,8 +85,8 @@ List<Activity> findByVolunteerIdAndActivityStatusAndDateLessThanEqual(Long volun
     JOIN a.volunteer v
     JOIN v.department d
     WHERE a.activityStatus = 'APPROVED'
-      AND (:startDate IS NULL OR a.date >= :startDate)
-      AND (:endDate   IS NULL OR a.date <= :endDate)
+      AND a.date >= COALESCE(:startDate, a.date)
+      AND a.date <= COALESCE(:endDate, a.date)
     GROUP BY a.volunteer.id, v.name, d.name
     ORDER BY SUM(a.durationMinutes) DESC
     """)

@@ -195,6 +195,10 @@ public class ActivityService {
 // (definida pelo banco via ORDER BY na query).
 
     public List<VolunteerRankingDTO> getRanking(LocalDate startDate, LocalDate endDate) {
+        if (startDate == null && endDate == null) {
+            startDate = LocalDate.now().withDayOfMonth(1);
+            endDate   = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
+        }
         List<Object[]> rows = activityRepository.findRanking(startDate, endDate);
 
         List<VolunteerRankingDTO> ranking = new ArrayList<>();
