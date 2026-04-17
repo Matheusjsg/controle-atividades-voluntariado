@@ -81,6 +81,7 @@ public class SecurityConfig {
                         .requestMatchers("/departments/create", "/departments/delete/**", "/departments/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/activity/*/status").hasAnyRole("ADMIN", "VOLUNTEER")
                         .requestMatchers(HttpMethod.GET, "/activity/report/**").hasAnyRole("ADMIN", "VOLUNTEER")
+                        .requestMatchers(HttpMethod.GET, "/activity/ranking/**").hasAnyRole("ADMIN", "VOLUNTEER")
                         .requestMatchers(HttpMethod.GET, "/certificate/generate/**").authenticated()
                         .anyRequest().authenticated()
                 )
