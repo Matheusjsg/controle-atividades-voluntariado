@@ -88,7 +88,7 @@ List<Activity> findByVolunteerIdAndActivityStatusAndDateLessThanEqual(Long volun
       AND a.date >= COALESCE(:startDate, a.date)
       AND a.date <= COALESCE(:endDate, a.date)
     GROUP BY a.volunteer.id, v.name, d.name
-    ORDER BY SUM(a.durationMinutes) DESC
+    ORDER BY SUM(a.durationMinutes) DESC, COUNT(a) DESC, v.name ASC
     """)
     List<Object[]> findRanking(
             @Param("startDate") LocalDate startDate,
