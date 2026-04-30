@@ -51,7 +51,7 @@ public class ActivityService {
 
         Activity savedactivity = activityRepository.save(activity);
 
-        return activityMapper.toDTO(activity);
+        return activityMapper.toDTO(savedactivity);
     }
 
     @Transactional
