@@ -40,7 +40,11 @@ public class AdminInitializer implements CommandLineRunner {
             Department adminDept = departmentRepository.findAll().stream()
                 .filter(d -> d.getName().contains("Administração"))
                 .findFirst()
-                .orElseGet(() -> departmentRepository.findById(1L).orElseThrow());
+                .orElseGet(() -> departmentRepository.findById(1L).orElse(null));
+
+            if (adminDept == null) {
+                return;
+            }
 
             Volunteer admin = new Volunteer();
             admin.setName(adminName);

@@ -49,7 +49,6 @@ class AuthServiceTest {
 
     @InjectMocks
     private AuthService authService;
-
     private Department department;
     private Volunteer volunteer;
 
