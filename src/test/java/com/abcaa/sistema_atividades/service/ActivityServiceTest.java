@@ -48,7 +48,6 @@ class ActivityServiceTest {
 
     @InjectMocks
     private ActivityService activityService;
-
     private ActivityDTO dto;
     private Volunteer volunteer;
     private Department department;

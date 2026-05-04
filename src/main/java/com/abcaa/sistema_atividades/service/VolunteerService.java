@@ -136,6 +136,7 @@ public class VolunteerService {
         volunteerRepository.deleteById(volunteer.getId());
     }
 
+
     public VolunteerDTO updateUserType(Long id, UserType userType) {
         Volunteer volunteer = volunteerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado."));

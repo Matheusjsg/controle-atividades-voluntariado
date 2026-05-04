@@ -7,6 +7,7 @@ import com.abcaa.sistema_atividades.repository.VolunteerProfileRepository;
 import com.abcaa.sistema_atividades.repository.VolunteerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class VolunteerProfileService {
@@ -19,34 +20,31 @@ public class VolunteerProfileService {
         this.volunteerRepository = volunteerRepository;
     }
 
-    public VolunteerProfileDTO save(Long volunteerId, VolunteerProfileDTO dto) {
-        Volunteer volunteer = volunteerRepository.findById(volunteerId)
-                .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado."));
-
-        VolunteerProfile profile = profileRepository.findByVolunteerId(volunteerId)
-                .orElse(new VolunteerProfile());
-
-        profile.setVolunteer(volunteer);
-        profile.setCpf(dto.getCpf());
-        profile.setPhone(dto.getPhone());
-        profile.setAddress(dto.getAddress());
-        profile.setNumber(dto.getNumber());
-        profile.setComplement(dto.getComplement());
-        profile.setBairro(dto.getBairro());
-        profile.setCity(dto.getCity());
-        profile.setState(dto.getState());
-        profile.setZipCode(dto.getZipCode());
-        profile.setBirthDate(dto.getBirthDate());
-
-        VolunteerProfile saved = profileRepository.save(profile);
-        return toDTO(saved);
-    }
 
     public VolunteerProfileDTO findByVolunteerId(Long volunteerId) {
         VolunteerProfile profile = profileRepository.findByVolunteerId(volunteerId)
                 .orElseThrow(() -> new EntityNotFoundException("Perfil não encontrado."));
         return toDTO(profile);
     }
+
+
+    @Transactional
+    public VolunteerProfileDTO save(Long volunteerId, VolunteerProfileDTO dto){
+
+        Volunteer volunteer = volunteerRepository.findById(volunteerId)
+                .orElseThrow(() -> new EntityNotFoundException("Voluntário não encontrado."));
+
+        VolunteerProfile profile = profileRepository.findByVolunteerId(volunteerId)
+                .orElseGet(VolunteerProfile::new);
+
+        profile.setVolunteer(volunteer);
+        updateProfileData(profile, dto);
+
+        VolunteerProfile saved = profileRepository.save(profile);
+
+        return toDTO(saved);
+    }
+
 
     private VolunteerProfileDTO toDTO(VolunteerProfile profile) {
         VolunteerProfileDTO dto = new VolunteerProfileDTO();
@@ -62,5 +60,19 @@ public class VolunteerProfileService {
         dto.setZipCode(profile.getZipCode());
         dto.setBirthDate(profile.getBirthDate());
         return dto;
+    }
+
+
+    private void updateProfileData(VolunteerProfile profile, VolunteerProfileDTO dto) {
+        profile.setCpf(dto.getCpf());
+        profile.setPhone(dto.getPhone());
+        profile.setAddress(dto.getAddress());
+        profile.setNumber(dto.getNumber());
+        profile.setComplement(dto.getComplement());
+        profile.setBairro(dto.getBairro());
+        profile.setCity(dto.getCity());
+        profile.setState(dto.getState());
+        profile.setZipCode(dto.getZipCode());
+        profile.setBirthDate(dto.getBirthDate());
     }
 }
