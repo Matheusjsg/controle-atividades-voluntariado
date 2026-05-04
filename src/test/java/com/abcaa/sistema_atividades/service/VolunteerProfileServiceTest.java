@@ -5,6 +5,7 @@ import com.abcaa.sistema_atividades.domain.entity.VolunteerProfile;
 import com.abcaa.sistema_atividades.dto.VolunteerProfileDTO;
 import com.abcaa.sistema_atividades.repository.VolunteerProfileRepository;
 import com.abcaa.sistema_atividades.repository.VolunteerRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,9 +56,8 @@ class VolunteerProfileServiceTest {
         profileDTO.setBirthDate(LocalDate.now());
 
         profile = new VolunteerProfile();
+        profile.setPhone("1111-1111");
         profile.setId(10L);
-
-
 
     }
 
@@ -86,10 +86,30 @@ class VolunteerProfileServiceTest {
     }
 
     @Test
-    void findByVolunteerId() {
+    void shouldReturnProfileWhenExists()  {
 
+    when(profileRepository.findByVolunteerId(profile.getId())).thenReturn(Optional.of(profile));
 
+    VolunteerProfileDTO result= profileService.findByVolunteerId(profile.getId());
 
+    assertNotNull(result);
+    assertEquals("1111-1111", result.getPhone());
+
+    verify(profileRepository).findByVolunteerId(profile.getId());
 
     }
+
+
+    @Test
+    void shouldThrowExceptionWhenProfileNotFound() {
+        when(profileRepository.findByVolunteerId(1L)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            profileService.findByVolunteerId(1L);
+
+        verify(profileRepository).findByVolunteerId(1L);
+    });
+
+    }
+
 }
